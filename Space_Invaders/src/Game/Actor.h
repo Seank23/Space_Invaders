@@ -11,7 +11,7 @@ namespace SpaceInvaders
 		Actor(glm::vec2 size);
 		~Actor();
 
-		void Move(glm::vec2 position);
+		virtual void Move(glm::vec2 position);
 
 		void SetPosition(glm::vec2 position);
 		void SetSize(glm::vec2 size);
@@ -28,5 +28,6 @@ namespace SpaceInvaders
 		glm::vec2 m_Size;
 		glm::mat4 m_Transform;
 		std::shared_ptr<Sprite> m_Sprite;
+		std::shared_ptr<Sprite> m_Projectile;
 	};
 }

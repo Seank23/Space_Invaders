@@ -35,6 +35,7 @@ namespace SpaceInvaders
 		std::shared_ptr<Game> m_Game;
 
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 	};
 }
 

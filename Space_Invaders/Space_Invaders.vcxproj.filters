@@ -1293,6 +1293,7 @@
     <ClInclude Include="src\Game\Alien.h" />
     <ClInclude Include="src\Engine\Sprite.h" />
     <ClInclude Include="src\Engine\Timer.h" />
+    <ClInclude Include="src\Game\Projectile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1326,5 +1327,6 @@
     <ClCompile Include="src\Game\Alien.cpp" />
     <ClCompile Include="src\Engine\Sprite.cpp" />
     <ClCompile Include="src\Game\Actor.cpp" />
+    <ClCompile Include="src\Game\Projectile.cpp" />
   </ItemGroup>
 </Project>

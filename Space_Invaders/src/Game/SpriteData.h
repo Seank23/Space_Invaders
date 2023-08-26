@@ -40,5 +40,8 @@ namespace SpaceInvaders
 				0,1,0,0,0,0,0,0,0,1,0
 		};
 		static constexpr int LayoutAlienSprite0B[2] = { 11, 8 };
+
+		static constexpr uint8_t Projectile0[1 * 4] = { 1, 1, 1, 1 };
+		static constexpr int LayoutProjectile0[2] = { 1, 4 };
 	};
 }
