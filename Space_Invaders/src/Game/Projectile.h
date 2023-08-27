@@ -12,12 +12,15 @@ namespace SpaceInvaders
 		virtual void Move(glm::vec2 position) override;
 
 		void SetDistanceToLive(float dtl) { m_DistanceToLive = dtl; }
+		void SetSpeed(float speed) { m_Speed = speed; }
 
 		float GetSpeed() { return m_Speed; }
 		float GetDistanceToLive() { return m_DistanceToLive; }
 
 	private:
-		float m_Speed = 2.0f;
+		virtual void CalculateTransform() override;
+
+		float m_Speed;
 		float m_DistanceToLive;
 	};
 }

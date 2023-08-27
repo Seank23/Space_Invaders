@@ -21,13 +21,12 @@ namespace SpaceInvaders
 		glm::mat4& GetTransform() { return m_Transform; }
 		glm::vec2& GetPosition() { return m_Position; }
 
-	private:
-		void CalculateTransform();
+	protected:
+		virtual void CalculateTransform();
 
 		glm::vec2 m_Position;
 		glm::vec2 m_Size;
 		glm::mat4 m_Transform;
 		std::shared_ptr<Sprite> m_Sprite;
-		std::shared_ptr<Sprite> m_Projectile;
 	};
 }

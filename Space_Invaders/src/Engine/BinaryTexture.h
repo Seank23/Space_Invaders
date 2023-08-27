@@ -19,7 +19,7 @@ namespace SpaceInvaders
 			return (r << 24) | (g << 16) | (b << 8) | 255;
 		}
 
-		static std::shared_ptr<BinaryTexture> Create(const uint8_t* pixels, const int* layout, const uint32_t color)
+		static std::shared_ptr<BinaryTexture> Create(const uint8_t* pixels, const int* layout, const uint32_t color = 0xFFFFFFFF)
 		{
 			return std::make_shared<BinaryTexture>(pixels, layout, color);
 		}

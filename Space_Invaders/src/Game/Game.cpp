@@ -30,7 +30,7 @@ namespace SpaceInvaders
         m_Shader->SetUniformMat4f("u_Projection", proj);
         m_Renderer = std::make_shared<SpriteRenderer>(*m_Shader);
 
-        std::srand(m_GameTimer.elapsedMilliseconds());
+        std::srand(std::time(0));
 
         m_Player = std::make_shared<Player>(glm::vec2(37.0f, 25.0f));
         m_Player->SetSprite(Sprite(BinaryTexture::Create(SpriteData::PlayerSprite, SpriteData::LayoutPlayerSprite, BinaryTexture::rgbToUint32(0, 216, 32))));
@@ -56,34 +56,34 @@ namespace SpaceInvaders
 
     void Game::Update(float ts)
     {
-        if (IsMoveValid({ m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
-            m_Player->Move({ m_MoveVelocity, 0.0f });
+        auto playerProjectiles = m_Player->GetLaser()->GetProjectiles();
+        for (auto &projectile : playerProjectiles)
+        {
+            projectile->Move(ts * projectile->GetSpeed() * m_Player->GetLaser()->GetDirection());
+            m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
+        }
+        m_Player->GetLaser()->CullProjectiles();
+
+        for (auto &alien : m_Aliens)
+        {
+            auto alienProjectiles = alien->GetLaser()->GetProjectiles();
+            for (auto &projectile : alienProjectiles)
+            {
+                projectile->Move(ts * projectile->GetSpeed() * alien->GetLaser()->GetDirection());
+                m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
+            }
+            alien->GetLaser()->CullProjectiles();
+        }
+
+        if (IsMoveValid({ ts * m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
+            m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
         m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
-        for (auto &alien : m_Aliens)
+        for (auto& alien : m_Aliens)
         {
             if (std::rand() % (int)(1.0f / alien->GetShootChance()) == 0)
                 alien->Shoot(m_WindowHeight);
             m_Renderer->DrawSprite(alien->GetSprite((int)m_GameTimer.elapsedMilliseconds()), alien->GetTransform());
-        }
-
-        auto playerProjectiles = m_Player->GetProjectiles();
-        for (auto &projectile : playerProjectiles)
-        {
-            projectile->Move(projectile->GetSpeed() * m_Player->GetShootDirection());
-            m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
-        }
-        m_Player->CullProjectiles();
-
-        for (auto &alien : m_Aliens)
-        {
-            auto alienProjectiles = alien->GetProjectiles();
-            for (auto &projectile : alienProjectiles)
-            {
-                projectile->Move(projectile->GetSpeed() * alien->GetShootDirection());
-                m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
-            }
-            alien->CullProjectiles();
         }
     }
 
@@ -92,11 +92,11 @@ namespace SpaceInvaders
         switch (key)
         {
         case GLFW_KEY_LEFT:
-            if (action == GLFW_PRESS) m_MoveVelocity = -2.0f;
+            if (action == GLFW_PRESS) m_MoveVelocity = -200.0f;
             else if (action == GLFW_RELEASE) m_MoveVelocity = 0.0f;
             break;
         case GLFW_KEY_RIGHT:
-            if (action == GLFW_PRESS) m_MoveVelocity = 2.0f;
+            if (action == GLFW_PRESS) m_MoveVelocity = 200.0f;
             else if (action == GLFW_RELEASE) m_MoveVelocity = 0.0f;
             break;
         case GLFW_KEY_UP:

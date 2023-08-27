@@ -65,7 +65,10 @@ namespace SpaceInvaders
 		glfwSwapInterval(1);
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		glfwSetWindowUserPointer(m_Window, &m_WindowData);
+
 		glDisable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		m_Game = std::make_shared<Game>();
 		m_Game->Init(new int[2]{ (int)m_WindowData.Width, (int)m_WindowData.Height });
@@ -78,12 +81,14 @@ namespace SpaceInvaders
 			}
 		);
 
-		//auto startTime = std::chrono::system_clock::now();
+		double prevTime = glfwGetTime();
 		while (!glfwWindowShouldClose(m_Window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			m_Game->Update(0.0f);
+			double deltaTime = glfwGetTime() - prevTime;
+			m_Game->Update(deltaTime);
+			prevTime = glfwGetTime();
 
 			glfwSwapBuffers(m_Window);
 			glfwPollEvents();
