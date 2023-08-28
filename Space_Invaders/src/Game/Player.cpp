@@ -11,6 +11,7 @@ namespace SpaceInvaders
     {
         m_Laser = new Laser(&m_Position, glm::vec2(0.0f, -1.0f),
             Sprite(BinaryTexture::Create(SpriteData::Projectile0, SpriteData::LayoutProjectile0)), glm::vec2(2.0f, 12.0f));
+        m_Laser->SetProjectileSpeed(750.0f);
     }
 
     Player::~Player()

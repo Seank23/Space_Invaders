@@ -4,7 +4,7 @@
 namespace SpaceInvaders
 {
     Laser::Laser(glm::vec2* position, glm::vec2 direction, Sprite& projectileSprite, glm::vec2 projectileSize)
-		: m_Direction(direction), m_ProjectileSize(projectileSize)
+		: m_Direction(direction), m_ProjectileSize(projectileSize), m_ProjectileSpeed(200.0f)
 	{
 		m_ProjectileSprite = projectileSprite;
         m_Position = position;
@@ -17,7 +17,7 @@ namespace SpaceInvaders
 
     void Laser::Shoot(float distanceToLive)
     {
-        Projectile projectile = Projectile(m_ProjectileSize);
+        Projectile projectile = Projectile(m_ProjectileSize, m_ProjectileSpeed);
         projectile.SetSprite(m_ProjectileSprite);
         projectile.SetPosition(*m_Position);
         projectile.SetDistanceToLive(distanceToLive);

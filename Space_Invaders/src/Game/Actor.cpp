@@ -5,6 +5,11 @@
 
 namespace SpaceInvaders
 {
+	Actor::Actor()
+		: m_Position({ 0.0f, 0.0f }), m_Size({ 0.0f, 0.0f }), m_Transform(glm::mat4(1.0f))
+	{
+	}
+
 	Actor::Actor(glm::vec2 size)
 		: m_Position({ 0.0f, 0.0f }), m_Size(size), m_Transform(glm::mat4(1.0f))
 	{

@@ -6,7 +6,7 @@ namespace SpaceInvaders
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(glm::vec2 size);
+		Projectile(glm::vec2 size, float speed);
 		~Projectile();
 
 		virtual void Move(glm::vec2 position) override;

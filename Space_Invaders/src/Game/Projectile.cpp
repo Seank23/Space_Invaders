@@ -5,8 +5,8 @@
 
 namespace SpaceInvaders
 {
-	Projectile::Projectile(glm::vec2 size)
-		: Actor(size), m_Speed(200.0f), m_DistanceToLive(1000.0f)
+	Projectile::Projectile(glm::vec2 size, float speed)
+		: Actor(size), m_Speed(speed), m_DistanceToLive(1000.0f)
 	{
 
 	}

@@ -24,19 +24,22 @@ namespace SpaceInvaders
 	private:
 		void CullAliens();
 
-		Player* m_Player;
-		std::vector<Alien*> m_Aliens;
+		float m_GameWidth = 600.0f;
+		float m_GameHeight = 800.0f;
 
 		Shader* m_Shader;
 		SpriteRenderer* m_Renderer;
 
-		Timer m_GameTimer;
+		Player* m_Player;
+		std::vector<Alien*> m_Aliens;
 
-		int m_WindowWidth = 0, m_WindowHeight = 0;
+		Timer m_GameTimer;
 		int m_EdgeBuffer = 50;
 
 		int m_AlienCount[2] = { 11, 5 };
 		float m_MoveVelocity = 0.0f;
+
+		glm::vec2 m_PixelSize = { 3.0f, 4.0f };
 	};
 }
 

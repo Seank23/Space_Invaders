@@ -16,8 +16,33 @@ namespace SpaceInvaders
 				1,1,1,1,1,1,1,1,1,1,1,
 		};
 		static constexpr int LayoutPlayerSprite[2] = {11, 7};
+		static constexpr float SizePlayerSprite[2] = {34.0f, 24.0f};
 
-		static constexpr uint8_t AlienSprite0A[11 * 8] = {
+		static constexpr uint8_t AlienSprite0A[8 * 8] = {
+				0,0,0,1,1,0,0,0,
+				0,0,1,1,1,1,0,0,
+				0,1,1,1,1,1,1,0,
+				1,1,0,1,1,0,1,1,
+				1,1,1,1,1,1,1,1,
+				0,1,0,1,1,0,1,0,
+				1,0,0,0,0,0,0,1,
+				0,1,0,0,0,0,1,0,
+		};
+
+		static constexpr uint8_t AlienSprite0B[8 * 8] = {
+				0,0,0,1,1,0,0,0,
+				0,0,1,1,1,1,0,0,
+				0,1,1,1,1,1,1,0,
+				1,1,0,1,1,0,1,1,
+				1,1,1,1,1,1,1,1,
+				0,0,1,0,0,1,0,0,
+				0,1,0,1,1,0,1,0,
+				1,0,1,0,0,1,0,1,
+		};
+		static constexpr int LayoutAlienSprite0[2] = { 8, 8 };
+		static constexpr float SizeAlienSprite0[2] = { 23.0f, 23.0f };
+
+		static constexpr uint8_t AlienSprite1A[11 * 8] = {
 				0,0,1,0,0,0,0,0,1,0,0,
 				0,0,0,1,0,0,0,1,0,0,0,
 				0,0,1,1,1,1,1,1,1,0,0,
@@ -27,9 +52,8 @@ namespace SpaceInvaders
 				1,0,1,0,0,0,0,0,1,0,1,
 				0,0,0,1,1,0,1,1,0,0,0
 		};
-		static constexpr int LayoutAlienSprite0A[2] = { 11, 8 };
 
-		static constexpr uint8_t AlienSprite0B[11 * 8] = {
+		static constexpr uint8_t AlienSprite1B[11 * 8] = {
 				0,0,1,0,0,0,0,0,1,0,0,
 				1,0,0,1,0,0,0,1,0,0,1,
 				1,0,1,1,1,1,1,1,1,0,1,
@@ -39,7 +63,44 @@ namespace SpaceInvaders
 				0,0,1,0,0,0,0,0,1,0,0,
 				0,1,0,0,0,0,0,0,0,1,0
 		};
-		static constexpr int LayoutAlienSprite0B[2] = { 11, 8 };
+		static constexpr int LayoutAlienSprite1[2] = { 11, 8 };
+		static constexpr float SizeAlienSprite1[2] = { 32.0f, 25.0f };
+
+		static constexpr uint8_t AlienSprite2A[12 * 8] = {
+				0,0,0,0,1,1,1,1,0,0,0,0,
+				0,1,1,1,1,1,1,1,1,1,1,0,
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,0,0,1,1,0,0,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				0,0,0,1,1,0,0,1,1,0,0,0,
+				0,0,1,1,0,1,1,0,1,1,0,0,
+				1,1,0,0,0,0,0,0,0,0,1,1,
+		};
+
+		static constexpr uint8_t AlienSprite2B[12 * 8] = {
+				0,0,0,0,1,1,1,1,0,0,0,0,
+				0,1,1,1,1,1,1,1,1,1,1,0,
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				1,1,1,0,0,1,1,0,0,1,1,1,
+				1,1,1,1,1,1,1,1,1,1,1,1,
+				0,0,1,1,1,0,0,1,1,1,0,0,
+				0,1,1,0,0,1,1,0,0,1,1,0,
+				0,0,1,1,0,0,0,0,1,1,0,0,
+		};
+		static constexpr int LayoutAlienSprite2[2] = { 12, 8 };
+		static constexpr float SizeAlienSprite2[2] = { 33.0f, 25.0f };
+
+		static constexpr uint8_t AlienDeathSprite[13 * 7] = {
+				0,1,0,0,1,0,0,0,1,0,0,1,0,
+				0,0,1,0,0,1,0,1,0,0,1,0,0,
+				0,0,0,1,0,0,0,0,0,1,0,0,0,
+				1,1,0,0,0,0,0,0,0,0,0,1,1,
+				0,0,0,1,0,0,0,0,0,1,0,0,0,
+				0,0,1,0,0,1,0,1,0,0,1,0,0,
+				0,1,0,0,1,0,0,0,1,0,0,1,0,
+		};
+		static constexpr int LayoutAlienDeathSprite[2] = { 13, 7 };
+		static constexpr float SizeAlienDeathSprite[2] = { 38.0f, 25.0f };
 
 		static constexpr uint8_t Projectile0[1 * 4] = { 1, 1, 1, 1 };
 		static constexpr int LayoutProjectile0[2] = { 1, 4 };

@@ -8,6 +8,7 @@ namespace SpaceInvaders
 	class Actor
 	{
 	public:
+		Actor();
 		Actor(glm::vec2 size);
 		~Actor();
 
@@ -17,7 +18,7 @@ namespace SpaceInvaders
 		void SetSize(glm::vec2 size);
 		virtual void SetSprite(Sprite& sprite) { m_Sprite = sprite; }
 
-		Sprite& GetSprite() { return m_Sprite; }
+		virtual Sprite& GetSprite() { return m_Sprite; }
 		glm::mat4& GetTransform() { return m_Transform; }
 		glm::vec2& GetPosition() { return m_Position; }
 		glm::vec2& GetSize() { return m_Size; }

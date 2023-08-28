@@ -25,7 +25,7 @@ namespace SpaceInvaders
 			bool VSync;
 
 			WindowData(const std::string& title = "Space Invaders",
-				unsigned int width = 800, unsigned int height = 600, bool vSync = 1)
+				unsigned int width = 768, unsigned int height = 1080, bool vSync = 1)
 				: Title(title), Width(width), Height(height), VSync(vSync)
 			{}
 		};

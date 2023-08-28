@@ -1295,6 +1295,7 @@
     <ClInclude Include="src\Engine\Timer.h" />
     <ClInclude Include="src\Game\Projectile.h" />
     <ClInclude Include="src\Game\Laser.h" />
+    <ClInclude Include="src\Engine\SpriteAnimator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1330,5 +1331,6 @@
     <ClCompile Include="src\Game\Actor.cpp" />
     <ClCompile Include="src\Game\Projectile.cpp" />
     <ClCompile Include="src\Game\Laser.cpp" />
+    <ClCompile Include="src\Engine\SpriteAnimator.cpp" />
   </ItemGroup>
 </Project>

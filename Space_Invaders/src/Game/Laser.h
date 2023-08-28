@@ -18,11 +18,13 @@ namespace SpaceInvaders
 
 		std::vector<Projectile>* GetProjectiles() { return &m_Projectiles; }
 		glm::vec2 GetDirection() { return m_Direction; }
+		void SetProjectileSpeed(float speed) { m_ProjectileSpeed = speed; }
 
 	private:
 		std::vector<Projectile> m_Projectiles;
 		Sprite m_ProjectileSprite;
 		glm::vec2 m_ProjectileSize;
+		float m_ProjectileSpeed;
 		glm::vec2* m_Position;
 		glm::vec2 m_Direction;
 	};
