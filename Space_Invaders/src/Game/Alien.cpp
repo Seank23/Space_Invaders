@@ -8,13 +8,18 @@ namespace SpaceInvaders
     Alien::Alien(glm::vec2 size)
         : Actor(size)
     {
-        m_Laser = std::make_shared<Laser>(&m_Position, glm::vec2(0.0f, 1.0f),
-            std::make_shared<Sprite>(BinaryTexture::Create(SpriteData::Projectile1, SpriteData::LayoutProjectile1)), glm::vec2(8.0f, 12.0f));
+        m_Laser = new Laser(&m_Position, glm::vec2(0.0f, 1.0f),
+            Sprite(BinaryTexture::Create(SpriteData::Projectile0, SpriteData::LayoutProjectile0)), glm::vec2(2.0f, 20.0f));
     }
 
     Alien::~Alien()
     {
+        delete m_Laser;
+    }
 
+    void Alien::TakeDamage()
+    {
+        m_IsAlive = false;
     }
 
     Sprite& Alien::GetSprite(int animationTime)

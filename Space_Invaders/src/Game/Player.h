@@ -13,11 +13,13 @@ namespace SpaceInvaders
 		~Player();
 
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }
+		void TakeDamage();
 
-		std::shared_ptr<Laser> GetLaser() { return m_Laser; }
+		Laser& GetLaser() { return *m_Laser; }
 
 	private:
-		std::shared_ptr<Laser> m_Laser;
+		Laser* m_Laser;
+		int m_Lives = 1;
 	};
 }
 

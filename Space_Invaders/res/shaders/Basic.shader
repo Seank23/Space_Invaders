@@ -17,7 +17,7 @@ void main()
 
 #shader fragment
 #version 330 core
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 outColor;
 
 in vec2 TexCoords;
 
@@ -26,5 +26,11 @@ uniform sampler2D u_Image;
 void main()
 {
 	//color = vec4(TexCoords, 0.0, 1.0);
-	color = texture(u_Image, TexCoords);
+	vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
+	if (gl_FragCoord.y < 150.0)
+		color = vec4(0.0, 0.8, 0.2, 1.0);
+	else if (gl_FragCoord.y > 550.0)
+		color = vec4(0.8, 0.0, 0.2, 1.0);
+
+	outColor = color * texture(u_Image, TexCoords);
 }

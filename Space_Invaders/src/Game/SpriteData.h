@@ -44,13 +44,13 @@ namespace SpaceInvaders
 		static constexpr uint8_t Projectile0[1 * 4] = { 1, 1, 1, 1 };
 		static constexpr int LayoutProjectile0[2] = { 1, 4 };
 
-		static constexpr uint8_t Projectile1[3 * 5] = { 
-			0, 1, 0,
-			1, 1, 1,
-			0, 1, 0,
-			0, 1, 0,
-			0, 1, 0
+		static constexpr uint8_t Projectile1[6 * 5] = { 
+			0, 0, 1, 1, 0, 0,
+			1, 1, 1, 1, 1, 1,
+			0, 0, 1, 1, 0, 0,
+			0, 0, 1, 1, 0, 0,
+			0, 0, 1, 1, 0, 0,
 		};
-		static constexpr int LayoutProjectile1[2] = { 3, 5 };
+		static constexpr int LayoutProjectile1[2] = { 6, 5 };
 	};
 }

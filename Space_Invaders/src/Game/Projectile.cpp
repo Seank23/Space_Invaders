@@ -22,6 +22,16 @@ namespace SpaceInvaders
 		Actor::Move(position);
 	}
 
+	bool Projectile::HasCollided(Actor& actor)
+	{
+		glm::vec2 position = actor.GetPosition();
+		glm::vec2 size = actor.GetSize();
+		glm::vec2 bottomLeft = { position.x - size.x / 2, position.y - size.y / 2 };
+		glm::vec2 topRight = { position.x + size.x / 2, position.y + size.y / 2 };
+
+		return glm::all(glm::greaterThan(m_Position, bottomLeft) && glm::lessThan(m_Position, topRight));
+	}
+
 	void Projectile::CalculateTransform()
 	{
 		m_Transform = glm::translate(glm::mat4(1.0f), { m_Position.x, m_Position.y, -1.0f })

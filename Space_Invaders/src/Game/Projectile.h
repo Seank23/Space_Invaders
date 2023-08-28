@@ -10,6 +10,7 @@ namespace SpaceInvaders
 		~Projectile();
 
 		virtual void Move(glm::vec2 position) override;
+		bool HasCollided(Actor& actor);
 
 		void SetDistanceToLive(float dtl) { m_DistanceToLive = dtl; }
 		void SetSpeed(float speed) { m_Speed = speed; }

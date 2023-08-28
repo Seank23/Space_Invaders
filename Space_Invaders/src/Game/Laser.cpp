@@ -3,10 +3,11 @@
 
 namespace SpaceInvaders
 {
-	Laser::Laser(glm::vec2* position, glm::vec2 direction, std::shared_ptr<Sprite> projectileSprite, glm::vec2 projectileSize)
-		: m_Position(position), m_Direction(direction), m_ProjectileSize(projectileSize)
+    Laser::Laser(glm::vec2* position, glm::vec2 direction, Sprite& projectileSprite, glm::vec2 projectileSize)
+		: m_Direction(direction), m_ProjectileSize(projectileSize)
 	{
 		m_ProjectileSprite = projectileSprite;
+        m_Position = position;
 	}
 
 	Laser::~Laser()
@@ -16,10 +17,10 @@ namespace SpaceInvaders
 
     void Laser::Shoot(float distanceToLive)
     {
-        std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(m_ProjectileSize);
-        projectile->SetSprite(*m_ProjectileSprite);
-        projectile->SetPosition(*m_Position);
-        projectile->SetDistanceToLive(distanceToLive);
+        Projectile projectile = Projectile(m_ProjectileSize);
+        projectile.SetSprite(m_ProjectileSprite);
+        projectile.SetPosition(*m_Position);
+        projectile.SetDistanceToLive(distanceToLive);
         m_Projectiles.push_back(projectile);
     }
 
@@ -29,7 +30,7 @@ namespace SpaceInvaders
             std::remove_if(
                 m_Projectiles.begin(),
                 m_Projectiles.end(),
-                [](std::shared_ptr<Projectile> p) { return p->GetDistanceToLive() <= 0; }
+                [](Projectile& p) { return p.GetDistanceToLive() <= 0; }
             ),
             m_Projectiles.end()
         );

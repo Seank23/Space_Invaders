@@ -22,11 +22,13 @@ namespace SpaceInvaders
 		bool IsMoveValid(glm::vec2 moveVelocity, glm::vec2 actorPosition);
 
 	private:
-		std::shared_ptr<Player> m_Player;
-		std::vector<std::shared_ptr<Alien>> m_Aliens;
+		void CullAliens();
 
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<SpriteRenderer> m_Renderer;
+		Player* m_Player;
+		std::vector<Alien*> m_Aliens;
+
+		Shader* m_Shader;
+		SpriteRenderer* m_Renderer;
 
 		Timer m_GameTimer;
 

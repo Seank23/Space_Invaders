@@ -6,7 +6,7 @@
 namespace SpaceInvaders
 {
 	Actor::Actor(glm::vec2 size)
-		: m_Position({ 0.0f, 0.0f }), m_Size(size), m_Sprite(nullptr), m_Transform(glm::mat4(1.0f))
+		: m_Position({ 0.0f, 0.0f }), m_Size(size), m_Transform(glm::mat4(1.0f))
 	{
 	}
 

@@ -11,6 +11,7 @@ namespace SpaceInvaders
 	class Sprite
 	{
 	public:
+		Sprite() = default;
 		Sprite(std::shared_ptr<BinaryTexture> texture);
 		~Sprite();
 
