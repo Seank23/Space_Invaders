@@ -1,4 +1,5 @@
 #include "SpriteAnimator.h"
+#include "Log.h"
 
 namespace SpaceInvaders
 {
@@ -12,7 +13,7 @@ namespace SpaceInvaders
 
     }
 
-    void SpriteAnimator::CreateAnimation(std::string name, int(*condition)(int), int durationMs = 0)
+    void SpriteAnimator::CreateAnimation(std::string name, int (*condition)(int), int durationMs)
     {
         m_Animations[name] = condition;
         m_AnimationNames.push_back(name);
@@ -23,15 +24,16 @@ namespace SpaceInvaders
     {
         auto condition = m_Animations[name];
         m_ActiveSprite = condition(m_ActiveSprite);
-        m_AnimationTimers[name] = m_AnimationDuration[name];
+        m_AnimationTimers[name] = (float)m_AnimationDuration[name];
     }
 
-    std::vector<std::string> SpriteAnimator::UpdateAnimationTimers(float timestep)
+    std::vector<std::string> SpriteAnimator::UpdateAnimationTimers(float ts)
     {
         std::vector<std::string> expired;
         for (std::string name : m_AnimationNames)
         {
-            m_AnimationTimers[name] -= ts;
+            if (m_AnimationTimers.find(name) == m_AnimationTimers.end()) continue;
+            m_AnimationTimers[name] -= ts * 1000;
             if (m_AnimationTimers[name] <= 0)
             {
                 expired.push_back(name);

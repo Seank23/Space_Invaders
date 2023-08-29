@@ -42,16 +42,16 @@ namespace SpaceInvaders
 
         glm::vec2 initialPos = { m_GameWidth / 7, m_GameHeight / 4 };
 
-        float xPadding = (m_GameWidth - 2 * initialPos.x) / (m_AlienCount[0] - 1);
+        float m_AlienPaddingX = (m_GameWidth - 2 * initialPos.x) / (m_AlienCount[0] - 1);
         float yPadding = (m_GameHeight - initialPos.x - (m_GameHeight / 1.8f)) / m_AlienCount[1];
         int type = 0;
-        for (int y = 0; y < m_AlienCount[1]; y++)
+        for (int y = m_AlienCount[1] - 1; y >= 0; y--)
         {
             type = y > 2 ? 2 : y > 0 ? 1 : 0;
             for (int x = 0; x < m_AlienCount[0]; x++)
             {
                 Alien* alien = new Alien(type);
-                alien->SetPosition({ initialPos.x + x * xPadding, initialPos.y + y * yPadding });
+                alien->SetPosition({ initialPos.x + x * m_AlienPaddingX, initialPos.y + y * yPadding });
                 m_Aliens.emplace_back(alien);
             }
         }
@@ -69,13 +69,13 @@ namespace SpaceInvaders
                 if (projectile.HasCollided(*alien))
                 {
                     alien->TakeDamage();
+                    m_StopAliens = true;
                     projectile.SetDistanceToLive(0);
                 }
             }
             m_Renderer->DrawSprite(projectile.GetSprite(), projectile.GetTransform());
         }
         m_Player->GetLaser().CullProjectiles();
-        CullAliens();
 
         for (auto &alien : m_Aliens)
         {
@@ -97,12 +97,40 @@ namespace SpaceInvaders
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
         m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
+
         for (auto& alien : m_Aliens)
         {
-            if ((int)m_GameTimer.elapsedMilliseconds() % 1000 <= ts * 1000)
-                alien->Animate("Move");
-            if (std::rand() % (int)(1.0f / alien->GetShootChance()) == 0)
-                alien->Shoot(m_GameHeight);
+            std::vector<std::string> expiredAnimations = alien->GetAnimator().UpdateAnimationTimers(ts);
+            for (std::string anim : expiredAnimations)
+            {
+                if (anim == "Killed")
+                {
+                    alien->Destroy();
+                    m_StopAliens = false;
+                }
+            }
+        }
+        int removedIndex = CullAliens();
+        if (removedIndex > -1 && m_AlienIndex > removedIndex)
+            m_AlienIndex--;
+
+        if (!m_StopAliens && (int)m_GameTimer.elapsedMilliseconds() % 2 * ts < ts)
+        {
+            for (int i = 0; i < m_Aliens.size(); i++)
+            {
+                Alien& alien = *m_Aliens[i];
+                if (i == m_AlienIndex)
+                {
+                    alien.Move({ 6.0f, 0.0f });
+                }
+                if (std::rand() % (int)(1.0f / alien.GetShootChance()) == 0)
+                    alien.Shoot(m_GameHeight);
+            }
+            m_AlienIndex++;
+            m_AlienIndex %= m_Aliens.size();
+        }
+        for (auto& alien : m_Aliens)
+        {
             m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
         }
     }
@@ -130,15 +158,16 @@ namespace SpaceInvaders
                ((actorPosition.y + moveVelocity.y) >= m_EdgeBuffer && (actorPosition.y + moveVelocity.y) <= m_GameHeight - m_EdgeBuffer);
     }
 
-    void Game::CullAliens()
+    int Game::CullAliens()
     {
-        m_Aliens.erase(
-            std::remove_if(
-                m_Aliens.begin(),
-                m_Aliens.end(),
-                [](Alien* a) { return !a->GetIsAlive(); }
-            ),
-            m_Aliens.end()
-        );
+        int initialSize = m_Aliens.size();
+        auto it = std::find_if(m_Aliens.begin(), m_Aliens.end(), [](Alien* a) { return !a->GetIsAlive(); });
+        if (it != m_Aliens.end())
+        {
+            int index = std::distance(m_Aliens.begin(), it);
+            m_Aliens.erase(it);
+            return index;
+        }
+        return -1;
     }
 }

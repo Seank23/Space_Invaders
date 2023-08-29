@@ -93,42 +93,6 @@ namespace SpaceInvaders
 			glfwSwapBuffers(m_Window);
 			glfwPollEvents();
 		}
-
-		/*BinaryTexture alien(SpriteData::WidthAlienSprite0A, SpriteData::HeightAlienSprite0A, SpriteData::AlienSprite0A, BinaryTexture::rgbToUint32(255, 255, 255));
-
-		glm::mat4 proj = glm::ortho(0.0f, (float)m_WindowData.Width, (float)m_WindowData.Height, 0.0f, -1.0f, 1.0f);
-
-		Shader shader("res/shaders/Basic.shader");
-		shader.Bind();
-		shader.SetUniform1i("u_Image", 0);
-		shader.SetUniformMat4f("u_Projection", proj);
-		SpriteRenderer renderer(shader);
-
-		glDisable(GL_DEPTH_TEST);
-
-		float x = 0.0f, y = 0.0f;
-		int xDirection = 1, yDirection = 1;
-		while (!glfwWindowShouldClose(m_Window))
-		{
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			renderer.DrawSprite(alien, glm::vec2(x, y), glm::vec2(37.0f, 25.0f));
-
-			if (x >= m_WindowData.Width)
-				xDirection = -1;
-			else if (x <= 0.0f)
-				xDirection = 1;
-			if (y >= m_WindowData.Height)
-				yDirection = -1;
-			else if (y <= 0.0f)
-				yDirection = 1;
-
-			x += 0.5f * xDirection;
-			y += 0.5f * yDirection;
-
-			glfwSwapBuffers(m_Window);
-			glfwPollEvents();
-		}*/
 	}
 
 	void Application::Shutdown()

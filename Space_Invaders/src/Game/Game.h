@@ -22,7 +22,7 @@ namespace SpaceInvaders
 		bool IsMoveValid(glm::vec2 moveVelocity, glm::vec2 actorPosition);
 
 	private:
-		void CullAliens();
+		int CullAliens();
 
 		float m_GameWidth = 600.0f;
 		float m_GameHeight = 800.0f;
@@ -39,7 +39,9 @@ namespace SpaceInvaders
 		int m_AlienCount[2] = { 11, 5 };
 		float m_MoveVelocity = 0.0f;
 
-		glm::vec2 m_PixelSize = { 3.0f, 4.0f };
+		bool m_StopAliens = false;
+		float m_AlienPaddingX = 0.0f;
+		int m_AlienIndex = 0;
 	};
 }
 

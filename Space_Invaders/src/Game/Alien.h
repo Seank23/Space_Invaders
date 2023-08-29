@@ -19,10 +19,12 @@ namespace SpaceInvaders
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }
 		void TakeDamage();
 		void Animate(std::string name) { m_Animator.Animate(name); }
+		SpriteAnimator& GetAnimator() { return m_Animator; }
 
 		void AddSprite(int id, Sprite& sprite) { m_Animator.AddSprite(id, sprite); }
-		virtual Sprite& GetSprite() override { return m_Animator.GetActiveSprite(); };
+		void Destroy() { m_IsAlive = false; }
 
+		virtual Sprite& GetSprite() override { return m_Animator.GetActiveSprite(); }
 		Laser& GetLaser() { return *m_Laser; }
 		float GetShootChance() { return m_ShootChance; }
 		bool GetIsAlive() { return m_IsAlive; }
@@ -30,9 +32,8 @@ namespace SpaceInvaders
 	private:
 		int m_Type;
 		SpriteAnimator m_Animator;
-		//std::vector<Sprite> m_Sprites;
 		Laser* m_Laser;
-		float m_ShootChance = 0.00015;
+		float m_ShootChance = 0.00025;
 		bool m_IsAlive = true;
 	};
 }
