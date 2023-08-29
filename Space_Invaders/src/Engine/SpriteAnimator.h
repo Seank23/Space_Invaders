@@ -12,8 +12,9 @@ namespace SpaceInvaders
 		SpriteAnimator();
 		~SpriteAnimator();
 
-		void CreateAnimation(std::string name, int (*condition)(int));
+		void CreateAnimation(std::string name, int (*condition)(int), int durationMs = 0);
 		void Animate(std::string name);
+		std::vector<std::string> UpdateAnimationTimers(float timestep);
 
 		void AddSprite(int id, Sprite& sprite);
 		Sprite& GetActiveSprite() { return m_Sprites[m_ActiveSprite]; }
@@ -22,6 +23,9 @@ namespace SpaceInvaders
 		int m_ActiveSprite = 0;
 		std::map<int, Sprite> m_Sprites;
 		std::map<std::string, int (*)(int)> m_Animations;
+		std::vector<std::string> m_AnimationNames;
+		std::map<std::string, int> m_AnimationDuration;
+		std::map<std::string, int> m_AnimationTimers;
 	};
 }
 

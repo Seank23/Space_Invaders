@@ -31,7 +31,7 @@ namespace SpaceInvaders
             break;
         }
         m_Animator.AddSprite(2, Sprite(BinaryTexture::Create(SpriteData::AlienDeathSprite, SpriteData::LayoutAlienDeathSprite)));
-        m_Animator.CreateAnimation("Move", [](int activeSprite) { return activeSprite == 0 ? 1 : 0; });
+        m_Animator.CreateAnimation("Move", [](int activeSprite) { return activeSprite == 0 ? 1 : 0; }, 0);
     }
 
     Alien::~Alien()
