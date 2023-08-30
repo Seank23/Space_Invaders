@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include <GLFW/glfw3.h>
+#include <cmath>
 
 namespace SpaceInvaders
 {
@@ -114,18 +115,25 @@ namespace SpaceInvaders
         if (removedIndex > -1 && m_AlienIndex > removedIndex)
             m_AlienIndex--;
 
-        if (!m_StopAliens && (int)m_GameTimer.elapsedMilliseconds() % 2 * ts < ts)
+        if (!m_StopAliens && (int)m_GameTimer.elapsedMilliseconds() % (int)((1.0f / m_SwarmFps) * 1000) < (int)(1000 * ts))
         {
             for (int i = 0; i < m_Aliens.size(); i++)
             {
                 Alien& alien = *m_Aliens[i];
                 if (i == m_AlienIndex)
                 {
-                    alien.Move({ 6.0f, 0.0f });
+                    alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
                 }
                 if (std::rand() % (int)(1.0f / alien.GetShootChance()) == 0)
                     alien.Shoot(m_GameHeight);
             }
+            if (m_AlienIndex == m_Aliens.size() - 1)
+            {
+                m_AlienShouldDescend = ShouldAliensDescend();
+                if (m_AlienShouldDescend)
+                    m_AlienDirection *= -1;
+            }
+
             m_AlienIndex++;
             m_AlienIndex %= m_Aliens.size();
         }
@@ -148,7 +156,14 @@ namespace SpaceInvaders
             else if (action == GLFW_RELEASE) m_MoveVelocity = 0.0f;
             break;
         case GLFW_KEY_UP:
-            if (action == GLFW_PRESS) m_Player->Shoot(m_GameHeight);
+            if (action == GLFW_PRESS)
+            {
+                if (m_GameTimer.elapsedMilliseconds() - m_LastShootMs >= m_PlayerShootCooldownMs)
+                {
+                    m_Player->Shoot(m_GameHeight);
+                    m_LastShootMs = (int)m_GameTimer.elapsedMilliseconds();
+                }
+            }
         }
     }
 
@@ -169,5 +184,20 @@ namespace SpaceInvaders
             return index;
         }
         return -1;
+    }
+
+    bool Game::ShouldAliensDescend()
+    {
+        bool shouldDescend = false;
+        for (auto& alien : m_Aliens)
+        {
+            if (!IsMoveValid({ m_AlienDirection * m_AlienStepX, 0.0f }, alien->GetPosition()))
+            {
+                shouldDescend = true;
+                break;
+            }
+        }
+        if (shouldDescend) INFO(shouldDescend);
+        return shouldDescend;
     }
 }

@@ -28,7 +28,7 @@ void main()
 {
 	//color = vec4(TexCoords, 0.0, 1.0);
 	vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
-	if (gl_FragCoord.y < u_WindowLayout.y / 2.85)
+	if (gl_FragCoord.y < u_WindowLayout.y / 3.33)
 		color = vec4(0.0, 0.8, 0.2, 1.0);
 	else if (gl_FragCoord.y > u_WindowLayout.y / 1.3)
 		color = vec4(0.8, 0.0, 0.2, 1.0);
