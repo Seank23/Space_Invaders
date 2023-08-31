@@ -137,6 +137,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\GameUtils.h" />
+    <ClInclude Include="src\Game\AlienSwarm.h" />
     <ClInclude Include="src\Engine\SpriteAnimator.h" />
     <ClInclude Include="src\Game\Laser.h" />
     <ClInclude Include="src\Game\Projectile.h" />
@@ -568,6 +570,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\GameUtils.cpp" />
+    <ClCompile Include="src\Game\AlienSwarm.cpp" />
     <ClCompile Include="src\Engine\SpriteAnimator.cpp" />
     <ClCompile Include="src\Game\Laser.cpp" />
     <ClCompile Include="src\Game\Projectile.cpp" />

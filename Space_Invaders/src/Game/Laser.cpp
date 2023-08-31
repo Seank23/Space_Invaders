@@ -18,7 +18,7 @@ namespace SpaceInvaders
     void Laser::Shoot(float distanceToLive)
     {
         Projectile projectile = Projectile(m_ProjectileSize, m_ProjectileSpeed);
-        projectile.SetSprite(m_ProjectileSprite);
+        projectile.AddSprite(0, m_ProjectileSprite);
         projectile.SetPosition(*m_Position);
         projectile.SetDistanceToLive(distanceToLive);
         m_Projectiles.push_back(projectile);

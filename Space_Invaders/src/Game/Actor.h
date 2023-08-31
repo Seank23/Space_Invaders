@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/Sprite.h"
+#include "Engine/SpriteAnimator.h"
 
 #include "glm/glm.hpp"
 
@@ -13,12 +14,14 @@ namespace SpaceInvaders
 		~Actor();
 
 		virtual void Move(glm::vec2 position);
+		void Animate(std::string name) { m_Animator.Animate(name); }
 
 		void SetPosition(glm::vec2 position);
 		void SetSize(glm::vec2 size);
-		virtual void SetSprite(Sprite& sprite) { m_Sprite = sprite; }
+		void AddSprite(int id, Sprite& sprite) { m_Animator.AddSprite(id, sprite); }
 
-		virtual Sprite& GetSprite() { return m_Sprite; }
+		Sprite& GetSprite() { return m_Animator.GetActiveSprite(); }
+		SpriteAnimator& GetAnimator() { return m_Animator; }
 		glm::mat4& GetTransform() { return m_Transform; }
 		glm::vec2& GetPosition() { return m_Position; }
 		glm::vec2& GetSize() { return m_Size; }
@@ -30,5 +33,6 @@ namespace SpaceInvaders
 		glm::vec2 m_Size;
 		glm::mat4 m_Transform;
 		Sprite m_Sprite;
+		SpriteAnimator m_Animator;
 	};
 }
