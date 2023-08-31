@@ -13,13 +13,13 @@ namespace SpaceInvaders
 		~Player();
 
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }
-		void TakeDamage();
+		int TakeDamage();
 
 		Laser& GetLaser() { return *m_Laser; }
 
 	private:
 		Laser* m_Laser;
-		int m_Lives = 1;
+		int m_Lives = 3;
 	};
 }
 

@@ -18,13 +18,14 @@ namespace SpaceInvaders
 
 		void SetPosition(glm::vec2 position);
 		void SetSize(glm::vec2 size);
-		void AddSprite(int id, Sprite& sprite) { m_Animator.AddSprite(id, sprite); }
+		void AddSprite(int id, Sprite& sprite, glm::vec2 size) { m_Animator.AddSprite(id, sprite, size); }
 
 		Sprite& GetSprite() { return m_Animator.GetActiveSprite(); }
 		SpriteAnimator& GetAnimator() { return m_Animator; }
 		glm::mat4& GetTransform() { return m_Transform; }
 		glm::vec2& GetPosition() { return m_Position; }
 		glm::vec2& GetSize() { return m_Size; }
+		glm::vec2& GetSpriteSize() { return m_Animator.GetActiveSpriteSize(); }
 
 	protected:
 		virtual void CalculateTransform();

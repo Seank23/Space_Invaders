@@ -1,4 +1,5 @@
 #include "AlienSwarm.h"
+#include "Log.h"
 
 namespace SpaceInvaders
 {
@@ -39,23 +40,28 @@ namespace SpaceInvaders
 		{
 			if (projectile.HasCollided(*alien))
 			{
-				alien->TakeDamage();
 				projectile.SetDistanceToLive(0);
+				int livesLeft = alien->TakeDamage();
+				if (livesLeft == 0)
+				{
+					m_GameUtils->AddToScore(alien->GetPoints());
+					INFO("Score: {0}", m_GameUtils->GetScore());
+				}
 				return true;
 			}
 		}
 		return false;
 	}
-	std::vector<Projectile> AlienSwarm::UpdateProjectiles(float ts)
+	std::vector<Projectile*> AlienSwarm::UpdateProjectiles(float ts)
 	{
-		std::vector<Projectile> projectiles;
+		std::vector<Projectile*> projectiles;
 		for (auto& alien : m_Aliens)
 		{
 			auto alienProjectiles = alien->GetLaser().GetProjectiles();
 			for (auto& p : *alienProjectiles)
 			{
 				p.Move(ts * p.GetSpeed() * alien->GetLaser().GetDirection());
-				projectiles.push_back(p);
+				projectiles.push_back(&p);
 			}
 		}
 		return projectiles;

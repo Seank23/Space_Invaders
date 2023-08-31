@@ -3,7 +3,7 @@
 namespace SpaceInvaders
 {
 	GameUtils::GameUtils(glm::vec2 gameSpace, int edgePadding)
-		: m_GameSpace(gameSpace), m_EdgePadding(edgePadding)
+		: m_GameSpace(gameSpace), m_EdgePadding(edgePadding), m_Score(0)
 	{
 	}
 

@@ -46,6 +46,8 @@ namespace SpaceInvaders
 
     void Game::Update(float ts)
     {
+        if (m_GameOver) return;
+
         // Handle player projectiles
         auto playerProjectiles = m_Player->GetLaser().GetProjectiles();
         for (auto &projectile : *playerProjectiles)
@@ -59,14 +61,19 @@ namespace SpaceInvaders
 
         // Handle alien projectiles
         auto alienProjectiles = m_AlienSwarm->UpdateProjectiles(ts);
-        for (auto &projectile : alienProjectiles)
+        for (auto projectile : alienProjectiles)
         {
-            if (projectile.HasCollided(*m_Player))
+            if (projectile->HasCollided(*m_Player))
             {
-                m_Player->TakeDamage();
-                projectile.SetDistanceToLive(0);
+                projectile->SetDistanceToLive(0);
+                int livesLeft = m_Player->TakeDamage();
+                if (livesLeft == 0)
+                {
+                    INFO("Game Over!");
+                    m_GameOver = true;
+                }
             }
-            m_Renderer->DrawSprite(projectile.GetSprite(), projectile.GetTransform());
+            m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
         }
         m_AlienSwarm->CullProjectiles();
 

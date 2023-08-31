@@ -41,6 +41,7 @@ namespace SpaceInvaders
 		int m_LastShootMs = 0;
 
 		bool m_StopSwarm = false;
+		bool m_GameOver = false;
 	};
 }
 

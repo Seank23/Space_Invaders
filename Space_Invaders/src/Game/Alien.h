@@ -2,7 +2,6 @@
 #include "Actor.h"
 #include "Projectile.h"
 #include "Laser.h"
-#include "Engine/SpriteAnimator.h"
 
 #include <memory>
 #include <vector>
@@ -17,17 +16,20 @@ namespace SpaceInvaders
 
 		virtual void Move(glm::vec2 position) override;
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }
-		void TakeDamage();
+		int TakeDamage();
 		void Destroy() { m_IsAlive = false; }
 
 		Laser& GetLaser() { return *m_Laser; }
 		float GetShootChance() { return m_ShootChance; }
 		bool GetIsAlive() { return m_IsAlive; }
+		int GetPoints() { return m_Points; }
 
 	private:
 		int m_Type;
+		int m_Points;
+		int m_Lives;
 		Laser* m_Laser;
-		float m_ShootChance = 0.00025;
+		float m_ShootChance = 0.0005;
 		bool m_IsAlive = true;
 	};
 }

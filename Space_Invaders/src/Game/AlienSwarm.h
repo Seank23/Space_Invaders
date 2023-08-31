@@ -16,7 +16,7 @@ namespace SpaceInvaders
 		void Init(glm::vec2 initialPosition);
 
 		bool CheckProjectileCollision(Projectile& projectile);
-		std::vector<Projectile> UpdateProjectiles(float ts);
+		std::vector<Projectile*> UpdateProjectiles(float ts);
 		void CullProjectiles();
 		void CheckAnimationsAndCull(float ts, std::function<void()> callback);
 		void MoveAliens();

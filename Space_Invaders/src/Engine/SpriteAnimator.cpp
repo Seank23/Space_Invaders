@@ -25,6 +25,7 @@ namespace SpaceInvaders
         auto condition = m_Animations[name];
         m_ActiveSprite = condition(m_ActiveSprite);
         m_AnimationTimers[name] = (float)m_AnimationDuration[name];
+        //m_OnSizeChange(m_Sizes[m_ActiveSprite]);
     }
 
     std::vector<std::string> SpriteAnimator::UpdateAnimationTimers(float ts)
@@ -43,8 +44,9 @@ namespace SpaceInvaders
         return expired;
     }
 
-    void SpriteAnimator::AddSprite(int id, Sprite& sprite)
+    void SpriteAnimator::AddSprite(int id, Sprite& sprite, glm::vec2 size)
     {
         m_Sprites[id] = sprite;
+        m_Sizes[id] = size;
     }
 }
