@@ -113,5 +113,33 @@ namespace SpaceInvaders
 			0, 0, 1, 1, 0, 0,
 		};
 		static constexpr int LayoutProjectile1[2] = { 6, 5 };
+
+		static constexpr uint8_t ProjectileExplosionSprite0[8 * 8] = {
+				1,0,0,0,1,0,0,1,
+				0,0,1,0,0,0,1,0,
+				0,1,1,1,1,1,1,0,
+				1,1,1,1,1,1,1,1,
+				1,1,1,1,1,1,1,1,
+				0,1,1,1,1,1,1,0,
+				0,0,1,0,0,1,0,0,
+				1,0,0,1,0,0,0,1,
+		};
+		static constexpr int LayoutProjectileExplosionSprite0[2] = { 8, 8 };
+		static constexpr float SizeProjectileExplosionSprite0[2] = { 23.0f, 23.0f };
+
+		static constexpr uint8_t ProjectileExplosionSprite1[6 * 7] = {
+				0,0,1,0,0,0,
+				1,0,0,0,1,0,
+				0,0,1,1,0,1,
+				0,1,1,1,1,0,
+				1,0,1,1,1,0,
+				0,1,1,1,1,1,
+				1,0,1,1,1,0,
+		};
+		static constexpr int LayoutProjectileExplosionSprite1[2] = { 6, 7 };
+		static constexpr float SizeProjectileExplosionSprite1[2] = { 17.0f, 20.0f };
+
+		static constexpr uint8_t GroundSprite[1 * 4] = { 1, 1, 1, 1 };
+		static constexpr int LayoutGroundSprite[2] = { 1, 4 };
 	};
 }

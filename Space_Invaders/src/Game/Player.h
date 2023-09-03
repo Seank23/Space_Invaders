@@ -9,7 +9,7 @@ namespace SpaceInvaders
 	class Player : public Actor
 	{
 	public:
-		Player(glm::vec2 size);
+		Player();
 		~Player();
 
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }

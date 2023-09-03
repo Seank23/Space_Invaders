@@ -6,11 +6,12 @@ namespace SpaceInvaders
 	class Projectile : public Actor
 	{
 	public:
-		Projectile(glm::vec2 size, float speed);
+		Projectile(float speed);
 		~Projectile();
 
 		virtual void Move(glm::vec2 position) override;
 		bool HasCollided(Actor& actor);
+		void CheckForMiss(float ts);
 
 		void SetDistanceToLive(float dtl) { m_DistanceToLive = dtl; }
 		void SetSpeed(float speed) { m_Speed = speed; }
@@ -23,6 +24,7 @@ namespace SpaceInvaders
 
 		float m_Speed;
 		float m_DistanceToLive;
+		float m_Missed;
 	};
 }
 

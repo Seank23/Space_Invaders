@@ -7,18 +7,20 @@ namespace SpaceInvaders
 	class GameUtils
 	{
 	public:
-		GameUtils(glm::vec2 gameSpace, int edgePadding);
+		GameUtils();
 		~GameUtils();
 
 		bool IsMoveValid(glm::vec2 moveVelocity, glm::vec2 actorPosition);
 		void AddToScore(int points) { m_Score += points; }
 
 		glm::vec2 GetGameSpace() { return m_GameSpace; }
+		glm::vec2 GetMargin() { return m_Margin; }
 		int GetEdgePadding() { return m_EdgePadding; }
 		int GetScore() { return m_Score; }
 
 	private:
 		glm::vec2 m_GameSpace;
+		glm::vec2 m_Margin;
 		int m_EdgePadding;
 
 		int m_Score;

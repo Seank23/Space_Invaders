@@ -2,8 +2,8 @@
 
 namespace SpaceInvaders
 {
-	GameUtils::GameUtils(glm::vec2 gameSpace, int edgePadding)
-		: m_GameSpace(gameSpace), m_EdgePadding(edgePadding), m_Score(0)
+	GameUtils::GameUtils()
+		: m_GameSpace({ 600.0f, 800.0f }), m_Margin({ 100.0f, 50.0f }), m_EdgePadding(35), m_Score(0)
 	{
 	}
 

@@ -21,8 +21,6 @@ namespace SpaceInvaders
 		void InputListener(int key, int action);
 
 	private:
-		float m_GameWidth = 600.0f;
-		float m_GameHeight = 800.0f;
 		float m_SwarmFps = 60.0f;
 
 		Shader* m_Shader;
@@ -31,6 +29,8 @@ namespace SpaceInvaders
 		std::shared_ptr<GameUtils> m_GameUtils;
 		Player* m_Player;
 		AlienSwarm* m_AlienSwarm;
+		Sprite* m_Ground;
+		glm::mat4 m_GroundTransform;
 
 		Timer m_GameTimer;
 		int m_EdgeBuffer = 35;

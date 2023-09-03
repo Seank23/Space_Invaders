@@ -26,7 +26,9 @@ namespace SpaceInvaders
 
     void Game::Init(int* windowLayout)
     {
-        glm::mat4 proj = glm::ortho(0.0f, m_GameWidth, m_GameHeight, 0.0f, -1.0f, 1.0f);
+        m_GameUtils = std::make_shared<GameUtils>();
+
+        glm::mat4 proj = glm::ortho(0.0f, m_GameUtils->GetGameSpace().x, m_GameUtils->GetGameSpace().y, 0.0f, -1.0f, 1.0f);
         m_Shader = new Shader("res/shaders/Basic.shader");
         m_Shader->Bind();
         m_Shader->SetUniformMat4f("u_Projection", proj);
@@ -35,18 +37,22 @@ namespace SpaceInvaders
 
         std::srand(std::time(0));
 
-        m_GameUtils = std::make_shared<GameUtils>(glm::vec2(m_GameWidth, m_GameHeight), m_EdgeBuffer);
+        m_Ground = new Sprite(BinaryTexture::Create(SpriteData::GroundSprite, SpriteData::LayoutGroundSprite), { 0.0f, 0.0f });
+        m_GroundTransform = glm::translate(glm::mat4(1.0f), { m_GameUtils->GetGameSpace().x / 2, m_GameUtils->GetGameSpace().y - m_GameUtils->GetMargin().y, -1.0f }) *
+            glm::scale(glm::mat4(1.0f), { m_GameUtils->GetGameSpace().x, 2.0f, 1.0f });
 
-        m_Player = new Player({ SpriteData::SizePlayerSprite[0], SpriteData::SizePlayerSprite[1] });
+        m_Player = new Player();
         m_Player->SetPosition({ 300.0f, 685.0f });
 
         m_AlienSwarm = new AlienSwarm(m_GameUtils);
-        m_AlienSwarm->Init({ m_GameWidth / 7, m_GameHeight / 4 });
+        m_AlienSwarm->Init({ m_GameUtils->GetGameSpace().x / 7, m_GameUtils->GetGameSpace().y / 4 });
     }
 
     void Game::Update(float ts)
     {
         if (m_GameOver) return;
+
+        m_Renderer->DrawSprite(*m_Ground, m_GroundTransform);
 
         // Handle player projectiles
         auto playerProjectiles = m_Player->GetLaser().GetProjectiles();
@@ -54,7 +60,7 @@ namespace SpaceInvaders
         {
             projectile.Move(ts * projectile.GetSpeed() * m_Player->GetLaser().GetDirection());
             m_StopSwarm = m_AlienSwarm->CheckProjectileCollision(projectile);
-
+            projectile.CheckForMiss(ts);
             m_Renderer->DrawSprite(projectile.GetSprite(), projectile.GetTransform());
         }
         m_Player->GetLaser().CullProjectiles();
@@ -63,6 +69,7 @@ namespace SpaceInvaders
         auto alienProjectiles = m_AlienSwarm->UpdateProjectiles(ts);
         for (auto projectile : alienProjectiles)
         {
+            projectile->CheckForMiss(ts);
             if (projectile->HasCollided(*m_Player))
             {
                 projectile->SetDistanceToLive(0);
@@ -112,7 +119,7 @@ namespace SpaceInvaders
             {
                 if (m_GameTimer.elapsedMilliseconds() - m_LastShootMs >= m_PlayerShootCooldownMs)
                 {
-                    m_Player->Shoot(m_GameHeight);
+                    m_Player->Shoot(m_Player->GetPosition().y - m_GameUtils->GetMargin().x);
                     m_LastShootMs = (int)m_GameTimer.elapsedMilliseconds();
                 }
             }

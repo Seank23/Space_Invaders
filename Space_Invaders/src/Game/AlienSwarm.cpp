@@ -61,6 +61,7 @@ namespace SpaceInvaders
 			for (auto& p : *alienProjectiles)
 			{
 				p.Move(ts * p.GetSpeed() * alien->GetLaser().GetDirection());
+				p.CheckForMiss(ts);
 				projectiles.push_back(&p);
 			}
 		}
@@ -77,7 +78,7 @@ namespace SpaceInvaders
 	{
 		for (auto& alien : m_Aliens)
 		{
-			std::vector<std::string> expiredAnimations = alien->GetAnimator().UpdateAnimationTimers(ts);
+			std::vector<std::string> expiredAnimations = alien->GetAnimator()->UpdateAnimationTimers(ts);
 			for (std::string anim : expiredAnimations)
 			{
 				if (anim == "Killed")
@@ -102,7 +103,7 @@ namespace SpaceInvaders
 				alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
 			}
 			if (std::rand() % (int)(1.0f / alien.GetShootChance()) == 0)
-				alien.Shoot(m_GameUtils->GetGameSpace().y);
+				alien.Shoot(m_GameUtils->GetGameSpace().y - alien.GetPosition().y - m_GameUtils->GetMargin().y - 15.0f);
 		}
 		if (m_AlienIndex == m_Aliens.size() - 1)
 		{

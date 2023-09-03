@@ -10,7 +10,7 @@ namespace SpaceInvaders
 	class Laser
 	{
 	public:
-		Laser(glm::vec2* position, glm::vec2 direction, Sprite& projectileSprite, glm::vec2 projectileSize);
+		Laser(int type, glm::vec2* position, glm::vec2 direction);
 		~Laser();
 
 		void Shoot(float distanceToLive);
@@ -22,8 +22,7 @@ namespace SpaceInvaders
 
 	private:
 		std::vector<Projectile> m_Projectiles;
-		Sprite m_ProjectileSprite;
-		glm::vec2 m_ProjectileSize;
+		std::map<int, Sprite> m_ProjectileSprites;
 		float m_ProjectileSpeed;
 		glm::vec2* m_Position;
 		glm::vec2 m_Direction;

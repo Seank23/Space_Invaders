@@ -3,7 +3,8 @@
 
 namespace SpaceInvaders
 {
-	Sprite::Sprite(std::shared_ptr<BinaryTexture> texture)
+	Sprite::Sprite(std::shared_ptr<BinaryTexture> texture, glm::vec2 size)
+        : m_Size(size)
 	{
         float positions[] =
         {
