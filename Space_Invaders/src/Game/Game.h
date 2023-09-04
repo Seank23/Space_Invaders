@@ -40,7 +40,6 @@ namespace SpaceInvaders
 
 		float m_PlayerShootCooldownMs = 500.0f;
 		int m_LastShootMs = 0;
-		int m_Wave = 0;
 
 		bool m_StopSwarm = false;
 		bool m_GameOver = false;

@@ -18,11 +18,15 @@ namespace SpaceInvaders
 		int GetEdgePadding() { return m_EdgePadding; }
 		int GetScore() { return m_Score; }
 
+		void IncrementWave() { m_Wave++; }
+		int GetWave() { return m_Wave; }
+
 	private:
 		glm::vec2 m_GameSpace;
 		glm::vec2 m_Margin;
 		int m_EdgePadding;
-
+		
+		int m_Wave;
 		int m_Score;
 	};
 }

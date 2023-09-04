@@ -103,7 +103,7 @@ namespace SpaceInvaders
 			{
 				alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
 			}
-			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size()) == 0)
+			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size() / (m_GameUtils->GetWave() + 1)) == 0)
 				alien.Shoot(m_GameUtils->GetGameSpace().y - alien.GetPosition().y - m_GameUtils->GetMargin().y - 15.0f);
 		}
 		if (m_AlienIndex == m_Aliens.size() - 1)

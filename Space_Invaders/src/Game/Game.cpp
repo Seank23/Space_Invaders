@@ -55,8 +55,8 @@ namespace SpaceInvaders
 
         if (m_AlienSwarm->CheckWaveComplete())
         {
-            m_Wave++;
-            m_AlienSwarm->Init({ m_GameUtils->GetGameSpace().x / 7, (m_GameUtils->GetGameSpace().y / 4) + (50 * m_Wave) });
+            m_GameUtils->IncrementWave();
+            m_AlienSwarm->Init({ m_GameUtils->GetGameSpace().x / 7, (m_GameUtils->GetGameSpace().y / 4) + (50 * m_GameUtils->GetWave()) });
             m_Player->AddLife();
             m_InitAliens = true;
         }
