@@ -18,6 +18,32 @@ namespace SpaceInvaders
 		static constexpr int LayoutPlayerSprite[2] = {11, 7};
 		static constexpr float SizePlayerSprite[2] = {34.0f, 24.0f};
 
+		static constexpr uint8_t PlayerDeathSprite0[16 * 8] = {
+				0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,
+				1,0,0,0,0,0,1,0,0,0,0,1,1,0,0,1,
+				0,0,0,1,0,0,0,0,1,1,0,0,0,0,0,0,
+				0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,
+				0,1,0,0,1,0,1,1,0,0,1,1,0,0,0,1,
+				0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,
+				0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,
+				0,0,1,1,0,1,1,1,1,1,1,1,0,0,1,0,
+		};
+		static constexpr int LayoutPlayerDeathSprite0[2] = { 16, 8 };
+		static constexpr float SizePlayerDeathSprite0[2] = { 49.0f, 27.0f };
+
+		static constexpr uint8_t PlayerDeathSprite1[15 * 8] = {
+				0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+				0,0,0,0,0,1,0,1,0,1,0,0,0,0,0,
+				0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,
+				1,0,0,0,1,0,1,1,0,1,0,1,0,0,0,
+				0,0,1,1,1,1,1,1,1,1,0,0,1,0,0,
+				0,1,1,1,1,1,1,1,1,1,1,0,1,0,1,
+		};
+		static constexpr int LayoutPlayerDeathSprite1[2] = { 15, 8 };
+		static constexpr float SizePlayerDeathSprite1[2] = { 46.0f, 27.0f };
+
 		static constexpr uint8_t AlienSprite0A[8 * 8] = {
 				0,0,0,1,1,0,0,0,
 				0,0,1,1,1,1,0,0,
@@ -100,7 +126,7 @@ namespace SpaceInvaders
 				0,1,0,0,1,0,0,0,1,0,0,1,0,
 		};
 		static constexpr int LayoutAlienDeathSprite[2] = { 13, 7 };
-		static constexpr float SizeAlienDeathSprite[2] = { 38.0f, 25.0f };
+		static constexpr float SizeAlienDeathSprite[2] = { 34.0f, 25.0f };
 
 		static constexpr uint8_t Projectile0[1 * 4] = { 1, 1, 1, 1 };
 		static constexpr int LayoutProjectile0[2] = { 1, 4 };
@@ -113,6 +139,17 @@ namespace SpaceInvaders
 			0, 0, 1, 1, 0, 0,
 		};
 		static constexpr int LayoutProjectile1[2] = { 6, 5 };
+
+		static constexpr uint8_t Projectile2[3 * 7] = {
+			0, 1, 0,
+			1, 0, 0,
+			0, 1, 0,
+			0, 0, 1,
+			0, 1, 0,
+			1, 0, 0,
+			0, 1, 0,
+		};
+		static constexpr int LayoutProjectile2[2] = { 3, 7 };
 
 		static constexpr uint8_t ProjectileExplosionSprite0[8 * 8] = {
 				1,0,0,0,1,0,0,1,

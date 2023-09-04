@@ -29,7 +29,7 @@ namespace SpaceInvaders
 		int m_Points;
 		int m_Lives;
 		Laser* m_Laser;
-		float m_ShootChance = 0.0005;
+		float m_ShootChance = 0.02f;
 		bool m_IsAlive = true;
 	};
 }

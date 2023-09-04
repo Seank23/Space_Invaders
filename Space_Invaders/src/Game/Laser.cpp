@@ -17,7 +17,7 @@ namespace SpaceInvaders
         case 1:
             m_ProjectileSprites[0] = Sprite(BinaryTexture::Create(SpriteData::ProjectileExplosionSprite1, SpriteData::LayoutProjectileExplosionSprite1),
                 { SpriteData::SizeProjectileExplosionSprite1[0], SpriteData::SizeProjectileExplosionSprite1[1] });
-            m_ProjectileSprites[1] = Sprite(BinaryTexture::Create(SpriteData::Projectile1, SpriteData::LayoutProjectile1), glm::vec2(6.0f, 18.0f));
+            m_ProjectileSprites[1] = Sprite(BinaryTexture::Create(SpriteData::Projectile2, SpriteData::LayoutProjectile2), glm::vec2(8.0f, 20.0f));
             break;
         }
 	}

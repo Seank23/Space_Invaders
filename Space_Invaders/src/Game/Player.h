@@ -14,6 +14,7 @@ namespace SpaceInvaders
 
 		void Shoot(float distanceToLive) { m_Laser->Shoot(distanceToLive); }
 		int TakeDamage();
+		void AddLife() { m_Lives++; }
 
 		Laser& GetLaser() { return *m_Laser; }
 

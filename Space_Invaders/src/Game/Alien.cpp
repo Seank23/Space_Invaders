@@ -38,7 +38,7 @@ namespace SpaceInvaders
         AddSprite(2, Sprite(BinaryTexture::Create(SpriteData::AlienDeathSprite, SpriteData::LayoutAlienDeathSprite),
             { SpriteData::SizeAlienDeathSprite[0], SpriteData::SizeAlienDeathSprite[1] }));
         m_Animator->CreateAnimation("Move", [](int activeSprite) { return activeSprite == 0 ? 1 : 0; });
-        m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 2; }, 275);
+        m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 2; }, 275, 0);
     }
 
     Alien::~Alien()
@@ -48,7 +48,7 @@ namespace SpaceInvaders
 
     void Alien::Move(glm::vec2 position)
     {
-        m_Animator->Animate("Move");
+        Animate("Move");
         Actor::Move(position);
     }
 
@@ -56,7 +56,7 @@ namespace SpaceInvaders
     {
         m_Lives--;
         if (m_Lives == 0)
-            m_Animator->Animate("Killed");
+            Animate("Killed");
         return m_Lives;
     }
 }

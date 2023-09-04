@@ -17,6 +17,7 @@ namespace SpaceInvaders
 	void AlienSwarm::Init(glm::vec2 initialPosition)
 	{
 		m_InitialPosition = initialPosition;
+		m_AlienIndex = 0;
 		m_Aliens.clear();
 		glm::vec2 gameSpace = m_GameUtils->GetGameSpace();
 		m_AlienPaddingX = (gameSpace.x - 2 * m_InitialPosition.x) / (m_AlienCount[0] - 1);
@@ -102,7 +103,7 @@ namespace SpaceInvaders
 			{
 				alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
 			}
-			if (std::rand() % (int)(1.0f / alien.GetShootChance()) == 0)
+			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size()) == 0)
 				alien.Shoot(m_GameUtils->GetGameSpace().y - alien.GetPosition().y - m_GameUtils->GetMargin().y - 15.0f);
 		}
 		if (m_AlienIndex == m_Aliens.size() - 1)
@@ -112,8 +113,16 @@ namespace SpaceInvaders
 				m_AlienDirection *= -1;
 		}
 
-		m_AlienIndex++;
-		m_AlienIndex %= m_Aliens.size();
+		if (m_Aliens.size() > 0)
+		{
+			m_AlienIndex++;
+			m_AlienIndex %= m_Aliens.size();
+		}
+	}
+
+	bool AlienSwarm::CheckWaveComplete()
+	{
+		return m_Aliens.size() == 0;
 	}
 
 	int AlienSwarm::CullAliens()

@@ -13,7 +13,7 @@ namespace SpaceInvaders
 		~Actor();
 
 		virtual void Move(glm::vec2 position);
-		void Animate(std::string name) { m_Animator->Animate(name); }
+		void Animate(std::string name);
 
 		void SetPosition(glm::vec2 position);
 		void AddSprite(int id, Sprite& sprite) { m_Animator->AddSprite(id, sprite); }

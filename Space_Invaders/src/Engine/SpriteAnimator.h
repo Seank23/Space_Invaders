@@ -14,7 +14,7 @@ namespace SpaceInvaders
 		SpriteAnimator();
 		~SpriteAnimator();
 
-		void CreateAnimation(std::string name, int (*condition)(int), int durationMs = 0);
+		void CreateAnimation(std::string name, int (*condition)(int), int durationMs = 0, int priority = 99999);
 		void Animate(std::string name);
 		std::vector<std::string> UpdateAnimationTimers(float ts);
 
@@ -30,6 +30,7 @@ namespace SpaceInvaders
 		std::vector<std::string> m_AnimationNames;
 		std::map<std::string, int> m_AnimationDuration;
 		std::map<std::string, float> m_AnimationTimers;
+		std::map<std::string, int> m_Priority;
 	};
 }
 

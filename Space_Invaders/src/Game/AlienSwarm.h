@@ -20,8 +20,11 @@ namespace SpaceInvaders
 		void CullProjectiles();
 		void CheckAnimationsAndCull(float ts, std::function<void()> callback);
 		void MoveAliens();
+		bool CheckWaveComplete();
 
 		std::vector<Alien*>& GetAliens() { return m_Aliens; }
+		void SetAlienIndex(int index) { m_AlienIndex = index; }
+		int GetAlienIndex() { return m_AlienIndex; }
 
 
 	private:

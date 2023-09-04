@@ -22,6 +22,12 @@ namespace SpaceInvaders
 		CalculateTransform();
 	}
 
+	void Actor::Animate(std::string name)
+	{
+		m_Animator->Animate(name);
+		CalculateTransform();
+	}
+
 	void Actor::SetPosition(glm::vec2 position)
 	{
 		m_Position = position;
