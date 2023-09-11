@@ -16,8 +16,6 @@ namespace SpaceInvaders
 		void Init(glm::vec2 initialPosition);
 
 		bool CheckProjectileCollision(Projectile& projectile);
-		std::vector<Projectile*> UpdateProjectiles(float ts);
-		void CullProjectiles();
 		void CheckAnimationsAndCull(float ts, std::function<void()> callback);
 		void MoveAliens();
 		bool CheckWaveComplete();
@@ -31,6 +29,7 @@ namespace SpaceInvaders
 		int CullAliens();
 		bool ShouldAliensDescend();
 
+		std::shared_ptr<GameStateManager> m_StateManager;
 		std::vector<Alien*> m_Aliens;
 
 		int m_AlienCount[2] = { 11, 5 };

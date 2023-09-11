@@ -4,7 +4,7 @@
 namespace SpaceInvaders
 {
     Laser::Laser(int type, glm::vec2* position, glm::vec2 direction)
-		: m_Direction(direction), m_ProjectileSpeed(200.0f)
+		: m_Direction(direction), m_ProjectileSpeed(200.0f), m_StateManager(GameStateManager::Instance())
 	{
         m_Position = position;
         switch (type)
@@ -29,23 +29,11 @@ namespace SpaceInvaders
 
     void Laser::Shoot(float distanceToLive)
     {
-        Projectile projectile = Projectile(m_ProjectileSpeed);
+        std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(m_ProjectileSpeed, m_Direction);
         for(int i = 0; i < m_ProjectileSprites.size(); i++)
-            projectile.AddSprite(i, m_ProjectileSprites[i]);
-        projectile.SetPosition(*m_Position);
-        projectile.SetDistanceToLive(distanceToLive);
-        m_Projectiles.push_back(projectile);
-    }
-
-    void Laser::CullProjectiles()
-    {
-        m_Projectiles.erase(
-            std::remove_if(
-                m_Projectiles.begin(),
-                m_Projectiles.end(),
-                [](Projectile& p) { return p.GetDistanceToLive() <= 0; }
-            ),
-            m_Projectiles.end()
-        );
+            projectile->AddSprite(i, m_ProjectileSprites[i]);
+        projectile->SetPosition(*m_Position);
+        projectile->SetDistanceToLive(distanceToLive);
+        m_StateManager->AddProjectile(projectile);
     }
 }

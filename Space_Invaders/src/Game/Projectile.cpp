@@ -5,8 +5,8 @@
 
 namespace SpaceInvaders
 {
-	Projectile::Projectile(float speed)
-		: Actor(), m_Speed(speed), m_DistanceToLive(1000.0f), m_Missed(false)
+	Projectile::Projectile(float speed, glm::vec2 direction)
+		: Actor(), m_Direction(direction), m_Speed(speed), m_DistanceToLive(1000.0f), m_Missed(false)
 	{
 		m_Animator->CreateAnimation("Missed", [](int activeSprite) { return 0; }, 250);
 		m_Animator->SetActiveSpriteIndex(1);

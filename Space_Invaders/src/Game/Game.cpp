@@ -11,7 +11,8 @@
 namespace SpaceInvaders
 {
     Game::Game()
-        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_GameUtils(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f))
+        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_GameUtils(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
+        m_StateManager(GameStateManager::Instance())
     {
         m_GameTimer.start();
     }
@@ -61,41 +62,50 @@ namespace SpaceInvaders
             m_InitAliens = true;
         }
 
-        // Handle player projectiles
-        auto playerProjectiles = m_Player->GetLaser().GetProjectiles();
-        for (auto &projectile : *playerProjectiles)
-        {
-            if (m_PlayerHit)
-                projectile.SetDistanceToLive(0);
-            projectile.Move(ts * projectile.GetSpeed() * m_Player->GetLaser().GetDirection());
-            m_StopSwarm = m_AlienSwarm->CheckProjectileCollision(projectile);
-            projectile.CheckForMiss(ts);
-            m_Renderer->DrawSprite(projectile.GetSprite(), projectile.GetTransform());
-        }
-        m_Player->GetLaser().CullProjectiles();
-
-        // Handle alien projectiles
-        auto alienProjectiles = m_AlienSwarm->UpdateProjectiles(ts);
-        for (auto projectile : alienProjectiles)
+        // Handle projectiles
+        auto& projectiles = m_StateManager->GetProjectiles();
+        for (auto& projectile : projectiles)
         {
             if (m_PlayerHit)
                 projectile->SetDistanceToLive(0);
+            projectile->Move(ts * projectile->GetSpeed() * projectile->GetDirection());
             projectile->CheckForMiss(ts);
-            if (projectile->HasCollided(*m_Player))
+
+            if (glm::dot(projectile->GetDirection(), glm::vec2(0.0f, 1.0f)) < 0.0f)
             {
-                projectile->SetDistanceToLive(0);
-                int livesLeft = m_Player->TakeDamage();
-                m_PlayerHit = true;
-                if (livesLeft == 0)
+                // Check alien and projectile collision
+                m_StopSwarm = m_AlienSwarm->CheckProjectileCollision(*projectile);
+                if (projectile->GetDistanceToLive() == 0) continue;
+                for (int i = 0; i < projectiles.size(); i++)
                 {
-                    INFO("Game Over!");
-                    m_GameOver = true;
+                    if (glm::dot(projectile->GetDirection(), projectiles[i]->GetDirection()) > 0.0f || projectiles[i]->GetDistanceToLive() == 0) continue;
+                    if (projectile->HasCollided(*projectiles[i]))
+                    {
+                        projectile->SetDistanceToLive(0);
+                        projectiles[i]->SetDistanceToLive(0);
+                        projectile->CheckForMiss(ts);
+                    }
                 }
             }
-            m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
+            else
+            {
+                // Check player collision
+                if (projectile->HasCollided(*m_Player))
+                {
+                    projectile->SetDistanceToLive(0);
+                    int livesLeft = m_Player->TakeDamage();
+                    m_PlayerHit = true;
+                    if (livesLeft == 0)
+                    {
+                        INFO("Game Over!");
+                        m_GameOver = true;
+                    }
+                }
+            }
         }
-        m_AlienSwarm->CullProjectiles();
+        m_StateManager->CullProjectiles();
 
+        // Handle when player is hit
         if (m_PlayerHit)
         {
             m_StopSwarm = true;
@@ -141,6 +151,8 @@ namespace SpaceInvaders
         }
         else
         {
+            for (auto& projectile : projectiles)
+                m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
             for (auto& alien : aliens)
                 m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
             m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());

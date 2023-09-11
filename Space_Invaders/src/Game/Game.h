@@ -27,6 +27,7 @@ namespace SpaceInvaders
 		Shader* m_Shader;
 		SpriteRenderer* m_Renderer;
 
+		std::shared_ptr<GameStateManager> m_StateManager;
 		std::shared_ptr<GameUtils> m_GameUtils;
 		Player* m_Player;
 		AlienSwarm* m_AlienSwarm;

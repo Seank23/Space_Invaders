@@ -4,7 +4,7 @@
 namespace SpaceInvaders
 {
 	AlienSwarm::AlienSwarm(std::shared_ptr<GameUtils> gameUtils)
-		: m_GameUtils(gameUtils), m_InitialPosition({ 0.0f, 0.0f })
+		: m_GameUtils(gameUtils), m_InitialPosition({ 0.0f, 0.0f }), m_StateManager(GameStateManager::Instance())
 	{
 	}
 
@@ -52,27 +52,6 @@ namespace SpaceInvaders
 			}
 		}
 		return false;
-	}
-	std::vector<Projectile*> AlienSwarm::UpdateProjectiles(float ts)
-	{
-		std::vector<Projectile*> projectiles;
-		for (auto& alien : m_Aliens)
-		{
-			auto alienProjectiles = alien->GetLaser().GetProjectiles();
-			for (auto& p : *alienProjectiles)
-			{
-				p.Move(ts * p.GetSpeed() * alien->GetLaser().GetDirection());
-				p.CheckForMiss(ts);
-				projectiles.push_back(&p);
-			}
-		}
-		return projectiles;
-	}
-
-	void AlienSwarm::CullProjectiles()
-	{
-		for (auto& alien : m_Aliens)
-			alien->GetLaser().CullProjectiles();
 	}
 
 	void AlienSwarm::CheckAnimationsAndCull(float ts, std::function<void()> callback)

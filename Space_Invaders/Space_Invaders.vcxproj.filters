@@ -1298,6 +1298,7 @@
     <ClInclude Include="src\Engine\SpriteAnimator.h" />
     <ClInclude Include="src\Game\AlienSwarm.h" />
     <ClInclude Include="src\Game\GameUtils.h" />
+    <ClInclude Include="src\Game\GameStateManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
@@ -1336,5 +1337,6 @@
     <ClCompile Include="src\Engine\SpriteAnimator.cpp" />
     <ClCompile Include="src\Game\AlienSwarm.cpp" />
     <ClCompile Include="src\Game\GameUtils.cpp" />
+    <ClCompile Include="src\Game\GameStateManager.cpp" />
   </ItemGroup>
 </Project>
