@@ -138,7 +138,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\GameStateManager.h" />
-    <ClInclude Include="src\Game\GameUtils.h" />
     <ClInclude Include="src\Game\AlienSwarm.h" />
     <ClInclude Include="src\Engine\SpriteAnimator.h" />
     <ClInclude Include="src\Game\Laser.h" />
@@ -572,7 +571,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game\GameStateManager.cpp" />
-    <ClCompile Include="src\Game\GameUtils.cpp" />
     <ClCompile Include="src\Game\AlienSwarm.cpp" />
     <ClCompile Include="src\Engine\SpriteAnimator.cpp" />
     <ClCompile Include="src\Game\Laser.cpp" />

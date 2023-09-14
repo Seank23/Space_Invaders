@@ -23,12 +23,27 @@ namespace SpaceInvaders
 
 
     public:
+        static constexpr glm::vec2 s_GameSpace = { 600.0f, 800.0f };
+        static constexpr glm::vec2 s_Margin = { 100.0f, 50.0f };
+        static const int s_EdgePadding = 35;
+
+        bool IsMoveValid(glm::vec2 moveVelocity, glm::vec2 actorPosition);
+
+        void AddToScore(int points) { m_Score += points; }
+        int GetScore() { return m_Score; }
+
+        void IncrementWave() { m_Wave++; }
+        int GetWave() { return m_Wave; }
+
         void AddProjectile(std::shared_ptr<Projectile> p) { m_Projectiles.push_back(p); }
         std::vector<std::shared_ptr<Projectile>>& GetProjectiles() { return m_Projectiles; }
         void CullProjectiles();
 
     private:
         std::vector<std::shared_ptr<Projectile>> m_Projectiles;
+
+        int m_Wave;
+        int m_Score;
 	};
 }
 

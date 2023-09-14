@@ -11,7 +11,7 @@
 namespace SpaceInvaders
 {
     Game::Game()
-        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_GameUtils(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
+        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
         m_StateManager(GameStateManager::Instance())
     {
         m_GameTimer.start();
@@ -27,9 +27,7 @@ namespace SpaceInvaders
 
     void Game::Init(int* windowLayout)
     {
-        m_GameUtils = std::make_shared<GameUtils>();
-
-        glm::mat4 proj = glm::ortho(0.0f, m_GameUtils->GetGameSpace().x, m_GameUtils->GetGameSpace().y, 0.0f, -1.0f, 1.0f);
+        glm::mat4 proj = glm::ortho(0.0f, GameStateManager::s_GameSpace.x, GameStateManager::s_GameSpace.y, 0.0f, -1.0f, 1.0f);
         m_Shader = new Shader("res/shaders/Basic.shader");
         m_Shader->Bind();
         m_Shader->SetUniformMat4f("u_Projection", proj);
@@ -39,14 +37,14 @@ namespace SpaceInvaders
         std::srand(std::time(0));
 
         m_Ground = new Sprite(BinaryTexture::Create(SpriteData::GroundSprite, SpriteData::LayoutGroundSprite), { 0.0f, 0.0f });
-        m_GroundTransform = glm::translate(glm::mat4(1.0f), { m_GameUtils->GetGameSpace().x / 2, m_GameUtils->GetGameSpace().y - m_GameUtils->GetMargin().y, -1.0f }) *
-            glm::scale(glm::mat4(1.0f), { m_GameUtils->GetGameSpace().x, 2.0f, 1.0f });
+        m_GroundTransform = glm::translate(glm::mat4(1.0f), { GameStateManager::s_GameSpace.x / 2, GameStateManager::s_GameSpace.y - GameStateManager::s_Margin.y, -1.0f }) *
+            glm::scale(glm::mat4(1.0f), { GameStateManager::s_GameSpace.x, 2.0f, 1.0f });
 
         m_Player = new Player();
         m_Player->SetPosition({ 300.0f, 685.0f });
 
-        m_AlienSwarm = new AlienSwarm(m_GameUtils);
-        m_AlienSwarm->Init({ m_GameUtils->GetGameSpace().x / 7, m_GameUtils->GetGameSpace().y / 4 });
+        m_AlienSwarm = new AlienSwarm();
+        m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, GameStateManager::s_GameSpace.y / 4 });
         m_InitAliens = true;
     }
 
@@ -56,8 +54,8 @@ namespace SpaceInvaders
 
         if (m_AlienSwarm->CheckWaveComplete())
         {
-            m_GameUtils->IncrementWave();
-            m_AlienSwarm->Init({ m_GameUtils->GetGameSpace().x / 7, (m_GameUtils->GetGameSpace().y / 4) + (50 * m_GameUtils->GetWave()) });
+            m_StateManager->IncrementWave();
+            m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) + (50 * m_StateManager->GetWave()) });
             m_Player->AddLife();
             m_InitAliens = true;
         }
@@ -130,7 +128,7 @@ namespace SpaceInvaders
             m_AlienSwarm->MoveAliens();
 
         // Handle player move
-        if (m_GameUtils->IsMoveValid({ ts * m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
+        if (m_StateManager->IsMoveValid({ ts * m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
         // Handle drawing
@@ -180,7 +178,7 @@ namespace SpaceInvaders
                 {
                     if (m_GameTimer.elapsedMilliseconds() - m_LastShootMs >= m_PlayerShootCooldownMs)
                     {
-                        m_Player->Shoot(m_Player->GetPosition().y - m_GameUtils->GetMargin().x);
+                        m_Player->Shoot(m_Player->GetPosition().y - GameStateManager::s_Margin.x);
                         m_LastShootMs = (int)m_GameTimer.elapsedMilliseconds();
                     }
                 }

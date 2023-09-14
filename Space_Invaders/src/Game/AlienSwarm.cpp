@@ -3,8 +3,8 @@
 
 namespace SpaceInvaders
 {
-	AlienSwarm::AlienSwarm(std::shared_ptr<GameUtils> gameUtils)
-		: m_GameUtils(gameUtils), m_InitialPosition({ 0.0f, 0.0f }), m_StateManager(GameStateManager::Instance())
+	AlienSwarm::AlienSwarm()
+		: m_InitialPosition({ 0.0f, 0.0f }), m_StateManager(GameStateManager::Instance())
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace SpaceInvaders
 		m_InitialPosition = initialPosition;
 		m_AlienIndex = 0;
 		m_Aliens.clear();
-		glm::vec2 gameSpace = m_GameUtils->GetGameSpace();
+		glm::vec2 gameSpace = GameStateManager::s_GameSpace;
 		m_AlienPaddingX = (gameSpace.x - 2 * m_InitialPosition.x) / (m_AlienCount[0] - 1);
 		float yPadding = (gameSpace.y - m_InitialPosition.x - (gameSpace.y / 1.8f)) / m_AlienCount[1];
 		int type = 0;
@@ -45,8 +45,8 @@ namespace SpaceInvaders
 				int livesLeft = alien->TakeDamage();
 				if (livesLeft == 0)
 				{
-					m_GameUtils->AddToScore(alien->GetPoints());
-					INFO("Score: {0}", m_GameUtils->GetScore());
+					m_StateManager->AddToScore(alien->GetPoints());
+					INFO("Score: {0}", m_StateManager->GetScore());
 				}
 				return true;
 			}
@@ -82,8 +82,8 @@ namespace SpaceInvaders
 			{
 				alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
 			}
-			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size() / (m_GameUtils->GetWave() + 1)) == 0)
-				alien.Shoot(m_GameUtils->GetGameSpace().y - alien.GetPosition().y - m_GameUtils->GetMargin().y - 15.0f);
+			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size() / (m_StateManager->GetWave() + 1)) == 0)
+				alien.Shoot(GameStateManager::s_GameSpace.y - alien.GetPosition().y - GameStateManager::s_Margin.y - 15.0f);
 		}
 		if (m_AlienIndex == m_Aliens.size() - 1)
 		{
@@ -122,7 +122,7 @@ namespace SpaceInvaders
 		bool shouldDescend = false;
 		for (auto& alien : m_Aliens)
 		{
-			if (!m_GameUtils->IsMoveValid({ m_AlienDirection * m_AlienStepX, 0.0f }, alien->GetPosition()))
+			if (!m_StateManager->IsMoveValid({ m_AlienDirection * m_AlienStepX, 0.0f }, alien->GetPosition()))
 			{
 				shouldDescend = true;
 				break;

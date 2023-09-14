@@ -1,7 +1,6 @@
 #pragma once
 #include "Player.h"
 #include "AlienSwarm.h"
-#include "GameUtils.h"
 #include "Engine/Shader.h"
 #include "Engine/SpriteRenderer.h"
 #include "Engine/Timer.h"
@@ -28,7 +27,6 @@ namespace SpaceInvaders
 		SpriteRenderer* m_Renderer;
 
 		std::shared_ptr<GameStateManager> m_StateManager;
-		std::shared_ptr<GameUtils> m_GameUtils;
 		Player* m_Player;
 		AlienSwarm* m_AlienSwarm;
 		Sprite* m_Ground;

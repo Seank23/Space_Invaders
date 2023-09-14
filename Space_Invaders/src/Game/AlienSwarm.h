@@ -1,6 +1,5 @@
 #pragma once
 #include "Alien.h"
-#include "GameUtils.h"
 
 #include <vector>
 #include <functional>
@@ -10,7 +9,7 @@ namespace SpaceInvaders
 	class AlienSwarm
 	{
 	public:
-		AlienSwarm(std::shared_ptr<GameUtils> gameUtils);
+		AlienSwarm();
 		~AlienSwarm();
 
 		void Init(glm::vec2 initialPosition);
@@ -34,7 +33,6 @@ namespace SpaceInvaders
 
 		int m_AlienCount[2] = { 11, 5 };
 
-		std::shared_ptr<GameUtils> m_GameUtils;
 		glm::vec2 m_InitialPosition;
 
 		float m_AlienPaddingX = 0.0f;
