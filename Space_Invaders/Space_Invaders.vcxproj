@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Shield.h" />
     <ClInclude Include="src\Game\GameStateManager.h" />
     <ClInclude Include="src\Game\AlienSwarm.h" />
     <ClInclude Include="src\Engine\SpriteAnimator.h" />
@@ -570,6 +571,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Game\Shield.cpp" />
     <ClCompile Include="src\Game\GameStateManager.cpp" />
     <ClCompile Include="src\Game\AlienSwarm.cpp" />
     <ClCompile Include="src\Engine\SpriteAnimator.cpp" />

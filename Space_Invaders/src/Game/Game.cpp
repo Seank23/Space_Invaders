@@ -41,11 +41,16 @@ namespace SpaceInvaders
             glm::scale(glm::mat4(1.0f), { GameStateManager::s_GameSpace.x, 2.0f, 1.0f });
 
         m_Player = new Player();
-        m_Player->SetPosition({ 300.0f, 685.0f });
+        m_Player->SetPosition({ 300.0f, 680.0f });
 
         m_AlienSwarm = new AlienSwarm();
         m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, GameStateManager::s_GameSpace.y / 4 });
         m_InitAliens = true;
+
+        for (int i = 0; i < 4; i++)
+        {
+            m_Shields.push_back(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
+        }
     }
 
     void Game::Update(float ts)
@@ -98,6 +103,15 @@ namespace SpaceInvaders
                         INFO("Game Over!");
                         m_GameOver = true;
                     }
+                }
+            }
+            // Check shield collision
+            for (auto& shield : m_Shields)
+            {
+                if (projectile->HasCollided(*shield))
+                {
+                    projectile->SetDistanceToLive(0);
+                    projectile->CheckForMiss(ts);
                 }
             }
         }
@@ -153,6 +167,8 @@ namespace SpaceInvaders
                 m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
             for (auto& alien : aliens)
                 m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
+            for (auto& shield : m_Shields)
+                m_Renderer->DrawSprite(shield->GetSprite(), shield->GetTransform());
             m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
         }
 

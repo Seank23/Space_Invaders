@@ -45,7 +45,7 @@ namespace SpaceInvaders
 			m_Missed = true;
 			m_DistanceToLive = 10.0f;
 		}
-		if (m_Missed)
+		else if (m_Missed)
 		{
 			std::vector<std::string> expiredAnimations = m_Animator->UpdateAnimationTimers(ts);
 			for (std::string anim : expiredAnimations)
