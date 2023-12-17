@@ -1,5 +1,6 @@
 #pragma once
 #include "Projectile.h"
+#include "Shield.h"
 
 #include <memory>
 #include <vector>
@@ -36,11 +37,14 @@ namespace SpaceInvaders
         int GetWave() { return m_Wave; }
 
         void AddProjectile(std::shared_ptr<Projectile> p) { m_Projectiles.push_back(p); }
+        void AddShield(std::shared_ptr<Shield> s) { m_Shields.push_back(s); }
         std::vector<std::shared_ptr<Projectile>>& GetProjectiles() { return m_Projectiles; }
+        std::vector<std::shared_ptr<Shield>>& GetShields() { return m_Shields; }
         void CullProjectiles();
 
     private:
         std::vector<std::shared_ptr<Projectile>> m_Projectiles;
+        std::vector<std::shared_ptr<Shield>> m_Shields;
 
         int m_Wave;
         int m_Score;

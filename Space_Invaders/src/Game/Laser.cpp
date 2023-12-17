@@ -1,5 +1,6 @@
 #include "Laser.h"
 #include "SpriteData.h"
+#include "Log.h"
 
 namespace SpaceInvaders
 {

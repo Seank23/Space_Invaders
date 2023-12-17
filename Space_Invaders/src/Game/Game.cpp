@@ -49,7 +49,7 @@ namespace SpaceInvaders
 
         for (int i = 0; i < 4; i++)
         {
-            m_Shields.push_back(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
+            m_StateManager->AddShield(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
         }
     }
 
@@ -67,6 +67,7 @@ namespace SpaceInvaders
 
         // Handle projectiles
         auto& projectiles = m_StateManager->GetProjectiles();
+        auto& shields = m_StateManager->GetShields();
         for (auto& projectile : projectiles)
         {
             if (m_PlayerHit)
@@ -106,12 +107,21 @@ namespace SpaceInvaders
                 }
             }
             // Check shield collision
-            for (auto& shield : m_Shields)
+            if (projectile->GetDistanceToLive() >= 10)
             {
-                if (projectile->HasCollided(*shield))
+                float shieldCollisionThreshold = (shields[0]->GetPosition().y - shields[0]->GetSize().y / 2) - 10.0f;
+                if (projectile->GetPosition().y > shieldCollisionThreshold)
                 {
-                    projectile->SetDistanceToLive(0);
-                    projectile->CheckForMiss(ts);
+                    for (auto& shield : shields)
+                    {
+                        glm::vec2 hitPosition = shield->GetHitPosition(projectile->GetPosition().x);
+                        if (hitPosition.x > -1 && hitPosition.y > -1 && projectile->GetPosition().y >= shieldCollisionThreshold + hitPosition.y * 2.5f)
+                        {
+                            shield->TakeDamage(hitPosition);
+                            projectile->SetDistanceToLive(0);
+                            projectile->CheckForMiss(ts);
+                        }
+                    }
                 }
             }
         }
@@ -163,12 +173,12 @@ namespace SpaceInvaders
         }
         else
         {
+            for (auto& shield : shields)
+                m_Renderer->DrawSprite(shield->GetSprite(), shield->GetTransform());
             for (auto& projectile : projectiles)
                 m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
             for (auto& alien : aliens)
                 m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
-            for (auto& shield : m_Shields)
-                m_Renderer->DrawSprite(shield->GetSprite(), shield->GetTransform());
             m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
         }
 
