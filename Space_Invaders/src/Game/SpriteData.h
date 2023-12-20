@@ -15,6 +15,15 @@ namespace SpaceInvaders
 				1,1,1,1,1,1,1,1,1,1,1,
 				1,1,1,1,1,1,1,1,1,1,1,
 		};
+		static constexpr uint8_t PlayerSpriteEmpty[11 * 7] = {
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,
+		};
 		static constexpr int LayoutPlayerSprite[2] = {11, 7};
 		static constexpr float SizePlayerSprite[2] = {34.0f, 24.0f};
 

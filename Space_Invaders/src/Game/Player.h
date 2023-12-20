@@ -17,6 +17,7 @@ namespace SpaceInvaders
 		void AddLife() { m_Lives++; }
 
 		Laser& GetLaser() { return *m_Laser; }
+		int GetLives() { return m_Lives; }
 
 	private:
 		Laser* m_Laser;

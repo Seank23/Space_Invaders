@@ -28,9 +28,11 @@ void main()
 {
 	//color = vec4(TexCoords, 0.0, 1.0);
 	vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
-	if (gl_FragCoord.y < u_WindowLayout.y / 3.33)
+	if (gl_FragCoord.y > u_WindowLayout.y / 17.5 && gl_FragCoord.y < u_WindowLayout.y / 3.33)
 		color = vec4(0.0, 0.8, 0.2, 1.0);
-	else if (gl_FragCoord.y > u_WindowLayout.y / 1.3)
+    else if (gl_FragCoord.y < u_WindowLayout.y / 17.5 && gl_FragCoord.x > u_WindowLayout.x / 8 && gl_FragCoord.x < u_WindowLayout.x / 1.6)
+        color = vec4(0.0, 0.8, 0.2, 1.0);
+	else if (gl_FragCoord.y > u_WindowLayout.y / 1.3 && gl_FragCoord.y < u_WindowLayout.y / 1.115)
 		color = vec4(0.8, 0.0, 0.2, 1.0);
 
 	outColor = color * texture(u_Image, TexCoords);
