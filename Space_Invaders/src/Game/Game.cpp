@@ -51,12 +51,12 @@ namespace SpaceInvaders
         {
             m_StateManager->AddShield(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
         }
-        m_ScoreLabelText = std::make_unique<TextRenderer>("score<1> hi-score score<2>", glm::vec2(300.0f, 20.0f), glm::vec2(540.0f, 22.0f));
-        m_Player1ScoreText = std::make_unique<TextRenderer>("0000", glm::vec2(110.0f, 65.0f), glm::vec2(80.0f, 22.0f));
-        m_HighScoreText = std::make_unique<TextRenderer>("0000", glm::vec2(280.0f, 65.0f), glm::vec2(80.0f, 22.0f));
-        m_LivesText = std::make_unique<TextRenderer>("3", glm::vec2(40.0f, 765.0f), glm::vec2(20.0f, 22.0f));
-        m_LivesLeftIcons = std::make_unique<TextRenderer>("``_____", glm::vec2(230.0f, 765.0f), glm::vec2(300.0f, 24.0f), SpriteData::LayoutPlayerSprite);
-        m_CreditsText = std::make_unique<TextRenderer>("credit 00", glm::vec2(480.0f, 765.0f), glm::vec2(180.0f, 22.0f));
+        m_ScoreLabelText = std::make_unique<TextSprite>("score<1> hi-score score<2>", glm::vec2(300.0f, 20.0f), glm::vec2(540.0f, 22.0f));
+        m_Player1ScoreText = std::make_unique<TextSprite>("0000", glm::vec2(110.0f, 65.0f), glm::vec2(80.0f, 22.0f));
+        m_HighScoreText = std::make_unique<TextSprite>("0000", glm::vec2(280.0f, 65.0f), glm::vec2(80.0f, 22.0f));
+        m_LivesText = std::make_unique<TextSprite>("3", glm::vec2(40.0f, 765.0f), glm::vec2(20.0f, 22.0f));
+        m_LivesLeftIcons = std::make_unique<TextSprite>("``_____", glm::vec2(230.0f, 765.0f), glm::vec2(300.0f, 24.0f), SpriteData::LayoutPlayerSprite);
+        m_CreditsText = std::make_unique<TextSprite>("credit 00", glm::vec2(480.0f, 765.0f), glm::vec2(180.0f, 22.0f));
     }
 
     void Game::Update(float ts)

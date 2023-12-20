@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "AlienSwarm.h"
 #include "Shield.h"
-#include "TextRenderer.h"
+#include "TextSprite.h"
 #include "Engine/Shader.h"
 #include "Engine/SpriteRenderer.h"
 #include "Engine/Timer.h"
@@ -48,12 +48,12 @@ namespace SpaceInvaders
 		float m_PlayerHitTimer = 1.0f;
 		bool m_InitAliens = false;
 
-		std::unique_ptr<TextRenderer> m_ScoreLabelText;
-		std::unique_ptr<TextRenderer> m_Player1ScoreText;
-		std::unique_ptr<TextRenderer> m_HighScoreText;
-		std::unique_ptr<TextRenderer> m_LivesText;
-		std::unique_ptr<TextRenderer> m_LivesLeftIcons;
-		std::unique_ptr<TextRenderer> m_CreditsText;
+		std::unique_ptr<TextSprite> m_ScoreLabelText;
+		std::unique_ptr<TextSprite> m_Player1ScoreText;
+		std::unique_ptr<TextSprite> m_HighScoreText;
+		std::unique_ptr<TextSprite> m_LivesText;
+		std::unique_ptr<TextSprite> m_LivesLeftIcons;
+		std::unique_ptr<TextSprite> m_CreditsText;
 	};
 }
 

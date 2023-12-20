@@ -1,4 +1,4 @@
-#include "TextRenderer.h"
+#include "TextSprite.h"
 #include "TextData.h"
 #include "SpriteData.h"
 
@@ -6,7 +6,7 @@
 
 namespace SpaceInvaders
 {
-	TextRenderer::TextRenderer(std::string text, glm::vec2 position, glm::vec2 size, const int* layout)
+	TextSprite::TextSprite(std::string text, glm::vec2 position, glm::vec2 size, const int* layout)
 		: m_Text(text), m_Position(position), m_Size(size), m_Layout(layout)
 	{
 		CreateTextSprite(text, size, layout);
@@ -14,31 +14,31 @@ namespace SpaceInvaders
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 	}
 
-	TextRenderer::~TextRenderer()
+	TextSprite::~TextSprite()
 	{
 	}
 
-	void TextRenderer::SetText(std::string text)
+	void TextSprite::SetText(std::string text)
 	{
 		m_Text = text;
 		CreateTextSprite(text, m_Size, m_Layout);
 	}
 
-	void TextRenderer::SetSize(glm::vec2 size)
+	void TextSprite::SetSize(glm::vec2 size)
 	{
 		m_Size = size;
 		m_Transform = glm::translate(glm::mat4(1.0f), { m_Position.x, m_Position.y, 0.0f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 	}
 
-	void TextRenderer::SetPosition(glm::vec2 position)
+	void TextSprite::SetPosition(glm::vec2 position)
 	{
 		m_Position = position;
 		m_Transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
 			* glm::scale(glm::mat4(1.0f), { m_Size.x, m_Size.y, 1.0f });
 	}
 
-	const uint8_t* TextRenderer::GetCharacter(char character)
+	const uint8_t* TextSprite::GetCharacter(char character)
 	{
 		switch (character)
 		{
@@ -71,7 +71,7 @@ namespace SpaceInvaders
 		return TextData::TextChar_0;
 	}
 
-	void TextRenderer::CreateTextSprite(std::string text, glm::vec2 size, const int* layout)
+	void TextSprite::CreateTextSprite(std::string text, glm::vec2 size, const int* layout)
 	{
 		glm::vec2 charLayout;
 		if (layout != nullptr)

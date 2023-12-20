@@ -6,11 +6,11 @@
 
 namespace SpaceInvaders
 {
-	class TextRenderer
+	class TextSprite
 	{
 	public:
-		TextRenderer(std::string text, glm::vec2 position, glm::vec2 size, const int* layout = nullptr);
-		~TextRenderer();
+		TextSprite(std::string text, glm::vec2 position, glm::vec2 size, const int* layout = nullptr);
+		~TextSprite();
 
 		void SetText(std::string text);
 		void SetSize(glm::vec2 size);
