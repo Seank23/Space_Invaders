@@ -21,6 +21,7 @@ namespace SpaceInvaders
 
 		glm::vec2 GetHitPosition(int posX);
 		void TakeDamage(glm::vec2 position);
+		void Reset();
 
 	private:
 		std::vector<uint8_t> m_Pixels;

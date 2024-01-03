@@ -32,6 +32,8 @@ namespace SpaceInvaders
 
         void AddToScore(int points) { m_Score += points; }
         int GetScore() { return m_Score; }
+        int GetHighScore() { return m_HighScore; }
+        void ResetGame();
 
         void IncrementWave() { m_Wave++; }
         int GetWave() { return m_Wave; }
@@ -48,6 +50,7 @@ namespace SpaceInvaders
 
         int m_Wave;
         int m_Score;
+        int m_HighScore;
 	};
 }
 

@@ -18,6 +18,7 @@ namespace SpaceInvaders
 		void CheckAnimationsAndCull(float ts, std::function<void()> callback);
 		void MoveAliens();
 		bool CheckWaveComplete();
+		bool HasReachedGround();
 
 		std::vector<Alien*>& GetAliens() { return m_Aliens; }
 		void SetAlienIndex(int index) { m_AlienIndex = index; }

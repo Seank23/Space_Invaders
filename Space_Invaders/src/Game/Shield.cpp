@@ -50,6 +50,13 @@ namespace SpaceInvaders
         m_Sprite = Sprite(BinaryTexture::Create(&m_Pixels[0], SpriteData::LayoutShieldSprite), m_Size);
     }
 
+    void Shield::Reset()
+    {
+        m_Pixels.assign(SpriteData::ShieldSprite, SpriteData::ShieldSprite + sizeof(SpriteData::ShieldSprite));
+        m_Sprite = Sprite(BinaryTexture::Create(&m_Pixels[0], SpriteData::LayoutShieldSprite), m_Size);
+        CalculateDamageDepth();
+    }
+
     void Shield::SubtractPixels(std::vector<uint8_t> pixels, glm::vec2 layout, glm::vec2 position)
     {
         int pixelsIndex = 0;

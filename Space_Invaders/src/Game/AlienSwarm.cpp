@@ -104,6 +104,11 @@ namespace SpaceInvaders
 		return m_Aliens.size() == 0;
 	}
 
+	bool AlienSwarm::HasReachedGround()
+	{
+		return m_Aliens[0]->GetPosition().y > m_StateManager->s_GameSpace.y * 0.75f;
+	}
+
 	int AlienSwarm::CullAliens()
 	{
 		int initialSize = m_Aliens.size();

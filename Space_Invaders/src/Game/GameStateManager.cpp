@@ -3,7 +3,7 @@
 namespace SpaceInvaders
 {
 	GameStateManager::GameStateManager()
-        : m_Wave(0), m_Score(0)
+        : m_Wave(0), m_Score(0), m_HighScore(0)
 	{
 	}
 
@@ -11,6 +11,13 @@ namespace SpaceInvaders
     {
         return ((actorPosition.x + moveVelocity.x) >= s_EdgePadding && (actorPosition.x + moveVelocity.x) <= s_GameSpace.x - s_EdgePadding) &&
             ((actorPosition.y + moveVelocity.y) >= s_EdgePadding && (actorPosition.y + moveVelocity.y) <= s_GameSpace.y - s_EdgePadding);
+    }
+
+    void GameStateManager::ResetGame()
+    {
+        m_HighScore = std::max(m_Score, m_HighScore);
+        m_Score = 0;
+        m_Wave = 0;
     }
 
     void GameStateManager::CullProjectiles()

@@ -41,27 +41,55 @@ namespace SpaceInvaders
             glm::scale(glm::mat4(1.0f), { GameStateManager::s_GameSpace.x, 2.0f, 1.0f });
 
         m_Player = new Player();
-        m_Player->SetPosition({ 300.0f, 680.0f });
+        m_Player->SetPosition({ 50.0f, 680.0f });
 
         m_AlienSwarm = new AlienSwarm();
         m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, GameStateManager::s_GameSpace.y / 4 });
         m_InitAliens = true;
 
         for (int i = 0; i < 4; i++)
-        {
             m_StateManager->AddShield(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
-        }
-        m_ScoreLabelText = std::make_unique<TextSprite>("score<1> hi-score score<2>", glm::vec2(300.0f, 20.0f), glm::vec2(540.0f, 22.0f));
+
+        m_ScoreLabelText = std::make_unique<TextSprite>("score<1> hi-score", glm::vec2(210.0f, 20.0f), glm::vec2(360.0f, 22.0f));
         m_Player1ScoreText = std::make_unique<TextSprite>("0000", glm::vec2(110.0f, 65.0f), glm::vec2(80.0f, 22.0f));
         m_HighScoreText = std::make_unique<TextSprite>("0000", glm::vec2(280.0f, 65.0f), glm::vec2(80.0f, 22.0f));
         m_LivesText = std::make_unique<TextSprite>("3", glm::vec2(40.0f, 765.0f), glm::vec2(20.0f, 22.0f));
         m_LivesLeftIcons = std::make_unique<TextSprite>("``_____", glm::vec2(230.0f, 765.0f), glm::vec2(300.0f, 24.0f), SpriteData::LayoutPlayerSprite);
         m_CreditsText = std::make_unique<TextSprite>("credit 00", glm::vec2(480.0f, 765.0f), glm::vec2(180.0f, 22.0f));
+        m_GameOverText = std::make_unique<TextSprite>("game over", glm::vec2(300.0f, 180.0f), glm::vec2(180.0f, 22.0f));
     }
 
     void Game::Update(float ts)
     {
         m_Renderer->DrawSprite(*m_Ground, m_GroundTransform);
+
+        if (m_GameOver)
+        {
+            m_GameOverTimer -= ts;
+            if (m_GameOverTimer <= 0.0f)
+            {
+                // Start new game
+                m_GameOverTimer = 3.0f;
+                m_GameOver = false;
+                m_StateManager->ResetGame();
+                m_Player->ResetLives();
+                m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) });
+                m_InitAliens = true;
+                for (auto& shield : m_StateManager->GetShields())
+                    shield->Reset();
+                int highScore = m_StateManager->GetHighScore();
+                m_HighScoreText->SetText(std::string(4 - std::min(4, (int)std::to_string(highScore).length()), '0') + std::to_string(highScore));
+                m_Player1ScoreText->SetText("0000");
+                m_LivesText->SetText("3");
+                m_LivesLeftIcons->SetText("``_____");
+                m_Player->SetPosition({ 50.0f, 680.0f });
+            }
+            else
+            {
+                DrawSprites(ts);
+                return;
+            }
+        }
 
         if (m_AlienSwarm->CheckWaveComplete())
         {
@@ -72,6 +100,11 @@ namespace SpaceInvaders
             m_LivesText->SetText(std::to_string(livesLeft));
             m_LivesLeftIcons->SetText(std::string(livesLeft - 1, '`') + std::string(7 - (livesLeft - 1), '_'));
             m_InitAliens = true;
+        }
+
+        if (m_AlienSwarm->HasReachedGround())
+        {
+            m_GameOver = true;
         }
 
         // Handle projectiles
@@ -112,14 +145,8 @@ namespace SpaceInvaders
                 if (projectile->HasCollided(*m_Player))
                 {
                     projectile->SetDistanceToLive(0);
-                    int livesLeft = m_Player->TakeDamage();
+                    m_Player->TakeDamage();
                     m_PlayerHit = true;
-                    if (livesLeft == 0)
-                    {
-                        INFO("Game Over!");
-                        m_GameOver = true;
-                        m_HighScoreText->SetText(m_Player1ScoreText->GetTextString());
-                    }
                 }
             }
             // Check shield collision
@@ -151,14 +178,20 @@ namespace SpaceInvaders
                 m_Player->Animate("Hit");
 
             m_PlayerHitTimer -= ts;
-            if (!m_GameOver && m_PlayerHitTimer <= 0.0f)
+            if (m_PlayerHitTimer <= 0.0f)
             {
                 int livesLeft = m_Player->GetLives();
+                if (livesLeft == 0)
+                {
+                    m_GameOver = true;
+                    INFO("Game Over!");
+                }
                 m_LivesText->SetText(std::to_string(livesLeft));
-                m_LivesLeftIcons->SetText(std::string(livesLeft - 1, '`') + std::string(7 - (livesLeft - 1), '_'));
+                m_LivesLeftIcons->SetText(std::string(std::max(livesLeft - 1, 0), '`') + std::string(7 - std::max(livesLeft - 1, 0), '_'));
                 m_PlayerHit = false;
                 m_StopSwarm = false;
                 m_PlayerHitTimer = 1.0f;
+                m_Player->SetPosition({ 50.0f, 680.0f });
                 m_Player->GetAnimator()->SetActiveSpriteIndex(0);
             }
         }
@@ -175,7 +208,16 @@ namespace SpaceInvaders
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
         // Handle drawing
+        DrawSprites(ts);
+
+        m_FrameCount++;
+    }
+
+    void Game::DrawSprites(float ts)
+    {
         auto& aliens = m_AlienSwarm->GetAliens();
+        auto& projectiles = m_StateManager->GetProjectiles();
+        auto& shields = m_StateManager->GetShields();
         if (m_InitAliens)
         {
             int alienIndex = m_AlienSwarm->GetAlienIndex();
@@ -192,13 +234,16 @@ namespace SpaceInvaders
         }
         else
         {
+            if (!m_GameOver)
+            {
+                for (auto& projectile : projectiles)
+                    m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
+                m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
+            }
             for (auto& shield : shields)
                 m_Renderer->DrawSprite(shield->GetSprite(), shield->GetTransform());
-            for (auto& projectile : projectiles)
-                m_Renderer->DrawSprite(projectile->GetSprite(), projectile->GetTransform());
             for (auto& alien : aliens)
                 m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
-            m_Renderer->DrawSprite(m_Player->GetSprite(), m_Player->GetTransform());
 
             // Draw text
             m_Renderer->DrawSprite(m_ScoreLabelText->GetSprite(), m_ScoreLabelText->GetTransform());
@@ -207,9 +252,9 @@ namespace SpaceInvaders
             m_Renderer->DrawSprite(m_LivesText->GetSprite(), m_LivesText->GetTransform());
             m_Renderer->DrawSprite(m_LivesLeftIcons->GetSprite(), m_LivesLeftIcons->GetTransform());
             m_Renderer->DrawSprite(m_CreditsText->GetSprite(), m_CreditsText->GetTransform());
+            if (m_GameOver)
+                m_Renderer->DrawSprite(m_GameOverText->GetSprite(), m_GameOverText->GetTransform());
         }
-
-        m_FrameCount++;
     }
 
     void Game::InputListener(int key, int action)

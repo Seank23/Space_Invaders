@@ -61,6 +61,10 @@ namespace SpaceInvaders
 		case 'i': return TextData::TextChar_I;
 		case 'd': return TextData::TextChar_D;
 		case 't': return TextData::TextChar_T;
+		case 'g': return TextData::TextChar_G;
+		case 'a': return TextData::TextChar_A;
+		case 'm': return TextData::TextChar_M;
+		case 'v': return TextData::TextChar_V;
 		case '<': return TextData::TextChar_Left;
 		case '>': return TextData::TextChar_Right;
 		case '-': return TextData::TextChar_Dash;
