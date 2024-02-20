@@ -63,6 +63,8 @@ namespace SpaceInvaders
     {
         m_Renderer->DrawSprite(*m_Ground, m_GroundTransform);
 
+        m_StateManager->SetPlayerPosition(m_Player->GetPosition().x);
+
         if (m_GameOver)
         {
             m_GameOverTimer -= ts;
@@ -152,15 +154,16 @@ namespace SpaceInvaders
             // Check shield collision
             if (projectile->GetDistanceToLive() >= 10)
             {
-                float shieldCollisionThreshold = (shields[0]->GetPosition().y - shields[0]->GetSize().y / 2) - 10.0f;
-                if (projectile->GetPosition().y > shieldCollisionThreshold)
+                float shieldCollisionThresholdTop = (shields[0]->GetPosition().y - shields[0]->GetSize().y / 2) - 10.0f;
+                float shieldCollisionThresholdBottom = (shields[0]->GetPosition().y + shields[0]->GetSize().y / 2) + 10.0f;
+                if (projectile->GetPosition().y > shieldCollisionThresholdTop && projectile->GetPosition().y < shieldCollisionThresholdBottom)
                 {
                     for (auto& shield : shields)
                     {
-                        glm::vec2 hitPosition = shield->GetHitPosition(projectile->GetPosition().x);
-                        if (hitPosition.x > -1 && hitPosition.y > -1 && projectile->GetPosition().y >= shieldCollisionThreshold + hitPosition.y * 2.5f)
+                        glm::vec2 hitPosition = shield->GetHitPosition(projectile->GetPosition().x, (int)projectile->GetDirection().y);
+                        if (hitPosition.x > -1 && hitPosition.y > -1 && projectile->GetPosition().y >= shieldCollisionThresholdTop + hitPosition.y * 2.5f)
                         {
-                            shield->TakeDamage(hitPosition);
+                            shield->TakeDamage(hitPosition, (int)projectile->GetDirection().y);
                             projectile->SetDistanceToLive(0);
                             projectile->CheckForMiss(ts);
                         }
@@ -198,6 +201,7 @@ namespace SpaceInvaders
 
         // Handle alien animations
         m_AlienSwarm->CheckAnimationsAndCull(ts, [this]() { m_StopSwarm = false; });
+        m_AlienSwarm->CalculateShootChance();
 
         // Handle alien move
         if (!m_InitAliens && !m_StopSwarm && (int)m_GameTimer.elapsedMilliseconds() % (int)((1.0f / m_SwarmFps) * 1000) < (int)(1000 * ts))

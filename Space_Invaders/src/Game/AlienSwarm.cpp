@@ -1,6 +1,9 @@
 #include "AlienSwarm.h"
 #include "Log.h"
 
+#include <iostream>
+#include <cmath>
+
 namespace SpaceInvaders
 {
 	AlienSwarm::AlienSwarm()
@@ -134,5 +137,17 @@ namespace SpaceInvaders
 			}
 		}
 		return shouldDescend;
+	}
+
+	void AlienSwarm::CalculateShootChance()
+	{
+		int playerPosition = m_StateManager->GetPlayerPosition();
+		int gameWidth = GameStateManager::s_GameSpace.x;
+		for (auto& alien : m_Aliens)
+		{
+			int posDifference = std::abs(alien->GetPosition().x - playerPosition);
+			float lerp = std::lerp(1.0f, 0.1f, (float)posDifference / gameWidth);
+			alien->SetShootChance(0.03f * lerp);
+		}
 	}
 }

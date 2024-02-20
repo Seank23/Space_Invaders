@@ -16,7 +16,7 @@ namespace SpaceInvaders
 		void Animate(std::string name);
 
 		void SetPosition(glm::vec2 position);
-		void AddSprite(int id, Sprite& sprite) { m_Animator->AddSprite(id, sprite); }
+		void AddSprite(int id, const Sprite& sprite) { m_Animator->AddSprite(id, sprite); }
 
 		virtual Sprite& GetSprite() { return m_Animator->GetActiveSprite(); }
 		std::shared_ptr<SpriteAnimator> GetAnimator() { return m_Animator; }

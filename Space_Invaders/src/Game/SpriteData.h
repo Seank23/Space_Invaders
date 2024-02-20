@@ -125,6 +125,18 @@ namespace SpaceInvaders
 		static constexpr int LayoutAlienSprite2[2] = { 12, 8 };
 		static constexpr float SizeAlienSprite2[2] = { 33.0f, 25.0f };
 
+		static constexpr uint8_t AlienShipSprite[16 * 7] = {
+				0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,
+				0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,
+				0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+				0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,
+				1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+				0,0,1,1,1,0,0,1,1,0,0,1,1,1,0,0,
+				0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,
+		};
+		static constexpr int LayoutAlienShipSprite[2] = { 16, 7 };
+		static constexpr float SizeAlienShipSprite[2] = { 48.0f, 22.0f };
+
 		static constexpr uint8_t AlienDeathSprite[13 * 7] = {
 				0,1,0,0,1,0,0,0,1,0,0,1,0,
 				0,0,1,0,0,1,0,1,0,0,1,0,0,
@@ -194,6 +206,16 @@ namespace SpaceInvaders
 				1,1,1,1,1,1,
 				1,0,1,1,1,0,
 				0,1,0,1,0,1,
+		};
+		static constexpr uint8_t ShieldDamageReverseSprite[6 * 8] = {
+				0,1,0,1,0,1,
+				1,0,1,1,1,0,
+				1,1,1,1,1,1,
+				1,0,1,1,1,0,
+				0,1,1,1,1,0,
+				0,0,1,1,0,1,
+				1,0,1,1,1,0,
+				0,0,1,1,0,0,
 		};
 		static constexpr int LayoutShieldDamageSprite[2] = { 6, 8 };
 		static constexpr float SizeShieldDamageSprite[2] = { 18.0f, 23.0f };

@@ -18,7 +18,7 @@ namespace SpaceInvaders
 		void Animate(std::string name);
 		std::vector<std::string> UpdateAnimationTimers(float ts);
 
-		void AddSprite(int id, Sprite& sprite);
+		void AddSprite(int id, const Sprite& sprite);
 		Sprite& GetActiveSprite() { return m_Sprites[m_ActiveSprite]; }
 		int GetActiveSpriteIndex() { return m_ActiveSprite; }
 		void SetActiveSpriteIndex(int index) { m_ActiveSprite = index; }

@@ -2,7 +2,6 @@
 #include "Projectile.h"
 #include "Shield.h"
 
-#include <memory>
 #include <vector>
 
 namespace SpaceInvaders
@@ -35,7 +34,7 @@ namespace SpaceInvaders
         int GetHighScore() { return m_HighScore; }
         void ResetGame();
 
-        void IncrementWave() { m_Wave++; }
+        void IncrementWave() { m_Wave < 3 && m_Wave++; }
         int GetWave() { return m_Wave; }
 
         void AddProjectile(std::shared_ptr<Projectile> p) { m_Projectiles.push_back(p); }
@@ -44,6 +43,9 @@ namespace SpaceInvaders
         std::vector<std::shared_ptr<Shield>>& GetShields() { return m_Shields; }
         void CullProjectiles();
 
+        void SetPlayerPosition(int position) { m_PlayerPosition = position; }
+        int GetPlayerPosition() { return m_PlayerPosition; }
+
     private:
         std::vector<std::shared_ptr<Projectile>> m_Projectiles;
         std::vector<std::shared_ptr<Shield>> m_Shields;
@@ -51,6 +53,7 @@ namespace SpaceInvaders
         int m_Wave;
         int m_Score;
         int m_HighScore;
+        int m_PlayerPosition;
 	};
 }
 

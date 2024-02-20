@@ -19,6 +19,7 @@ namespace SpaceInvaders
 		void MoveAliens();
 		bool CheckWaveComplete();
 		bool HasReachedGround();
+		void CalculateShootChance();
 
 		std::vector<Alien*>& GetAliens() { return m_Aliens; }
 		void SetAlienIndex(int index) { m_AlienIndex = index; }

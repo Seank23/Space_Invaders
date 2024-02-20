@@ -19,15 +19,16 @@ namespace SpaceInvaders
 		glm::mat4 GetTransform() { return m_Transform; }
 		glm::vec2 GetSize() { return m_Size; }
 
-		glm::vec2 GetHitPosition(int posX);
-		void TakeDamage(glm::vec2 position);
+		glm::vec2 GetHitPosition(int posX, int direction);
+		void TakeDamage(glm::vec2 position, int direction);
 		void Reset();
 
 	private:
 		std::vector<uint8_t> m_Pixels;
 		glm::vec2 m_Size;
 		glm::vec2 m_SpriteLayout;
-		std::vector<int> m_DamageDepth;
+		std::vector<int> m_DamageDepthFromTop;
+		std::vector<int> m_DamageDepthFromBottom;
 
 		void SubtractPixels(std::vector<uint8_t> pixels, glm::vec2 size, glm::vec2 position);
 		void CalculateDamageDepth();

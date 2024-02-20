@@ -1,9 +1,10 @@
 #include "GameStateManager.h"
+#include "Player.h"
 
 namespace SpaceInvaders
 {
 	GameStateManager::GameStateManager()
-        : m_Wave(0), m_Score(0), m_HighScore(0)
+        : m_Wave(0), m_Score(0), m_HighScore(0), m_PlayerPosition(0)
 	{
 	}
 

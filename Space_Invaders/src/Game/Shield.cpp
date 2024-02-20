@@ -25,7 +25,7 @@ namespace SpaceInvaders
 
     }
 
-    glm::vec2 Shield::GetHitPosition(int posX)
+    glm::vec2 Shield::GetHitPosition(int posX, int direction)
     {
         int shieldLeft = m_Position.x - m_Size.x / 2;
         int shieldRight = m_Position.x + m_Size.x / 2;
@@ -35,16 +35,25 @@ namespace SpaceInvaders
             int pixelIndex = std::floor(shieldPos / (m_Size.x / m_SpriteLayout.x));
             pixelIndex = std::clamp(pixelIndex, 0, (int)m_SpriteLayout.x - 1);
 
-            return { pixelIndex, m_DamageDepth[pixelIndex] };
+            return { pixelIndex, direction > 0 ? m_DamageDepthFromTop[pixelIndex] : m_DamageDepthFromBottom[pixelIndex] };
         }
         else
             return { -1, -1 };
     }
 
-    void Shield::TakeDamage(glm::vec2 position)
+    void Shield::TakeDamage(glm::vec2 position, int direction)
     {
-        std::vector<uint8_t> explosionPixels(SpriteData::ShieldDamageSprite, SpriteData::ShieldDamageSprite + sizeof(SpriteData::ShieldDamageSprite));
+        std::vector<uint8_t> explosionPixels;
         glm::vec2 layout = { SpriteData::LayoutShieldDamageSprite[0], SpriteData::LayoutShieldDamageSprite[1] };
+        if (direction > 0) 
+        {
+            explosionPixels = std::vector<uint8_t>(SpriteData::ShieldDamageSprite, SpriteData::ShieldDamageSprite + sizeof(SpriteData::ShieldDamageSprite));
+        }
+        else
+        {
+            explosionPixels = std::vector<uint8_t>(SpriteData::ShieldDamageSprite, SpriteData::ShieldDamageSprite + sizeof(SpriteData::ShieldDamageSprite));
+            position = { position.x, std::max(position.y - (SpriteData::LayoutShieldDamageSprite[1] - 2), 0.0f) };
+        }
         SubtractPixels(explosionPixels, layout, position);
         CalculateDamageDepth();
         m_Sprite = Sprite(BinaryTexture::Create(&m_Pixels[0], SpriteData::LayoutShieldSprite), m_Size);
@@ -77,7 +86,7 @@ namespace SpaceInvaders
 
     void Shield::CalculateDamageDepth()
     {
-        m_DamageDepth.clear();
+        m_DamageDepthFromTop.clear();
         for (int i = 0; i < m_SpriteLayout.x; i++)
         {
             bool depthHit = false;
@@ -85,12 +94,28 @@ namespace SpaceInvaders
             {
                 if (m_Pixels[i + j * m_SpriteLayout.x] == 1)
                 {
-                    m_DamageDepth.push_back(j);
+                    m_DamageDepthFromTop.push_back(j);
                     depthHit = true;
                     break;
                 }
             }
-            if (!depthHit) m_DamageDepth.push_back(-1);
+            if (!depthHit) m_DamageDepthFromTop.push_back(-1);
+        }
+
+        m_DamageDepthFromBottom.clear();
+        for (int i = 0; i < m_SpriteLayout.x; i++)
+        {
+            bool depthHit = false;
+            for (int j = m_SpriteLayout.y - 1; j > 0; j--)
+            {
+                if (m_Pixels[i + j * m_SpriteLayout.x] == 1)
+                {
+                    m_DamageDepthFromBottom.push_back(j);
+                    depthHit = true;
+                    break;
+                }
+            }
+            if (!depthHit) m_DamageDepthFromBottom.push_back(-1);
         }
     }
 }

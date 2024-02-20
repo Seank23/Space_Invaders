@@ -53,7 +53,7 @@ namespace SpaceInvaders
         return expired;
     }
 
-    void SpriteAnimator::AddSprite(int id, Sprite& sprite)
+    void SpriteAnimator::AddSprite(int id, const Sprite& sprite)
     {
         m_Sprites[id] = sprite;
     }

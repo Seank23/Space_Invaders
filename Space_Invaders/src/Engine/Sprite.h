@@ -13,7 +13,7 @@ namespace SpaceInvaders
 	{
 	public:
 		Sprite() = default;
-		Sprite(std::shared_ptr<BinaryTexture> texture, glm::vec2 size);
+		Sprite(const std::shared_ptr<BinaryTexture> texture, glm::vec2 size);
 		~Sprite();
 
 		glm::vec2 GetSize() { return m_Size; }
