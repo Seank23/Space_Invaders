@@ -32,6 +32,7 @@ namespace SpaceInvaders
 		std::shared_ptr<GameStateManager> m_StateManager;
 		Player* m_Player;
 		AlienSwarm* m_AlienSwarm;
+		AlienSwarm* m_AlienShip;
 
 		Sprite* m_Ground;
 		glm::mat4 m_GroundTransform;
@@ -44,12 +45,12 @@ namespace SpaceInvaders
 		float m_PlayerShootCooldownMs = 500.0f;
 		int m_LastShootMs = 0;
 
-		bool m_StopSwarm = false;
 		bool m_GameOver = false;
 		bool m_PlayerHit = false;
 		float m_PlayerHitTimer = 1.0f;
 		float m_GameOverTimer = 3.0f;
 		bool m_InitAliens = false;
+		float m_ShipChance = 0.001f;
 
 		std::unique_ptr<TextSprite> m_ScoreLabelText;
 		std::unique_ptr<TextSprite> m_Player1ScoreText;

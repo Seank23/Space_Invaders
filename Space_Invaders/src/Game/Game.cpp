@@ -11,7 +11,7 @@
 namespace SpaceInvaders
 {
     Game::Game()
-        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
+        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_AlienShip(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
         m_StateManager(GameStateManager::Instance())
     {
         m_GameTimer.start();
@@ -46,6 +46,8 @@ namespace SpaceInvaders
         m_AlienSwarm = new AlienSwarm();
         m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, GameStateManager::s_GameSpace.y / 4 });
         m_InitAliens = true;
+
+        m_AlienShip = new AlienSwarm(true);
 
         for (int i = 0; i < 4; i++)
             m_StateManager->AddShield(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));
@@ -122,9 +124,14 @@ namespace SpaceInvaders
             if (glm::dot(projectile->GetDirection(), glm::vec2(0.0f, 1.0f)) < 0.0f)
             {
                 // Check alien and projectile collision
-                m_StopSwarm = m_AlienSwarm->CheckProjectileCollision(*projectile);
-                if (m_StopSwarm)
+                bool alienHit = m_AlienSwarm->CheckProjectileCollision(*projectile);
+                bool shipHit = false;
+                if (!alienHit)
+                    shipHit = m_AlienShip->CheckProjectileCollision(*projectile);
+
+                if (alienHit || shipHit)
                 {
+                    alienHit ? m_AlienSwarm->StopSwarm() : m_AlienShip->StopSwarm();
                     int score = m_StateManager->GetScore();
                     std::string scoreText = std::string(4 - std::min(4, (int)std::to_string(score).length()), '0') + std::to_string(score);
                     m_Player1ScoreText->SetText(scoreText);
@@ -176,7 +183,7 @@ namespace SpaceInvaders
         // Handle when player is hit
         if (m_PlayerHit)
         {
-            m_StopSwarm = true;
+            m_AlienSwarm->StopSwarm();
             if (m_FrameCount % 10 == 0)
                 m_Player->Animate("Hit");
 
@@ -192,7 +199,7 @@ namespace SpaceInvaders
                 m_LivesText->SetText(std::to_string(livesLeft));
                 m_LivesLeftIcons->SetText(std::string(std::max(livesLeft - 1, 0), '`') + std::string(7 - std::max(livesLeft - 1, 0), '_'));
                 m_PlayerHit = false;
-                m_StopSwarm = false;
+                m_AlienSwarm->RestartSwarm();
                 m_PlayerHitTimer = 1.0f;
                 m_Player->SetPosition({ 50.0f, 680.0f });
                 m_Player->GetAnimator()->SetActiveSpriteIndex(0);
@@ -200,16 +207,27 @@ namespace SpaceInvaders
         }
 
         // Handle alien animations
-        m_AlienSwarm->CheckAnimationsAndCull(ts, [this]() { m_StopSwarm = false; });
+        m_AlienSwarm->CheckAnimationsAndCull(ts, [this]() { m_AlienSwarm->RestartSwarm(); });
+        m_AlienShip->CheckAnimationsAndCull(ts, [this]() 
+            { 
+                for (auto& ship : m_AlienShip->GetAliens())
+                    ship->Animate("Killed");
+            });
         m_AlienSwarm->CalculateShootChance();
 
         // Handle alien move
-        if (!m_InitAliens && !m_StopSwarm && (int)m_GameTimer.elapsedMilliseconds() % (int)((1.0f / m_SwarmFps) * 1000) < (int)(1000 * ts))
-            m_AlienSwarm->MoveAliens();
+        if (!m_InitAliens && (int)m_GameTimer.elapsedMilliseconds() % (int)((1.0f / m_SwarmFps) * 1000) < (int)(1000 * ts))
+        {
+            if (!m_AlienSwarm->IsStopped()) m_AlienSwarm->MoveAliens();
+            if (!m_AlienShip->IsStopped()) m_AlienShip->MoveAliens();
+        }
 
         // Handle player move
         if (m_StateManager->IsMoveValid({ ts * m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
+
+        if (m_AlienShip->CheckWaveComplete() && std::rand() % (int)(1.0f / m_ShipChance) == 0)
+            m_AlienShip->Init({ 650.0f, 120.0f });
 
         // Handle drawing
         DrawSprites(ts);
@@ -247,6 +265,8 @@ namespace SpaceInvaders
             for (auto& shield : shields)
                 m_Renderer->DrawSprite(shield->GetSprite(), shield->GetTransform());
             for (auto& alien : aliens)
+                m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
+            for (auto& alien : m_AlienShip->GetAliens())
                 m_Renderer->DrawSprite(alien->GetSprite(), alien->GetTransform());
 
             // Draw text

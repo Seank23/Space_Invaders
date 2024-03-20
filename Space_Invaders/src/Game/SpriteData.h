@@ -244,5 +244,17 @@ namespace SpaceInvaders
 		};
 		static constexpr int LayoutShieldSprite[2] = { 19, 17 };
 		static constexpr float SizeShieldSprite[2] = { 57.0f, 50.0f };
+
+		static constexpr uint8_t AlienShipScoreSprite[19 * 7] = {
+				0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,
+				0,1,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,
+				0,0,1,0,0,0,0,1,0,0,1,1,0,0,1,0,0,1,1,
+				0,0,1,0,0,0,0,1,0,1,0,1,0,0,1,0,1,0,1,
+				0,0,1,0,0,0,0,1,1,0,0,1,0,0,1,1,0,0,1,
+				0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,1,
+				0,1,1,1,0,0,0,0,1,1,1,0,0,0,0,1,1,1,0,
+		};
+		static constexpr int LayoutAlienShipScoreSprite[2] = { 19, 7 };
+		static constexpr float SizeAlienShipScoreSprite[2] = { 50.0f, 18.0f };
 	};
 }

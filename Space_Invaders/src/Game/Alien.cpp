@@ -34,12 +34,27 @@ namespace SpaceInvaders
                 { SpriteData::SizeAlienSprite2[0], SpriteData::SizeAlienSprite2[1] }));
             m_Points = 10;
             break;
+        case 3:
+            AddSprite(0, Sprite(BinaryTexture::Create(SpriteData::AlienShipSprite, SpriteData::LayoutAlienShipSprite),
+                { SpriteData::SizeAlienShipSprite[0], SpriteData::SizeAlienShipSprite[1] }));
+            m_Points = 100;
         }
         AddSprite(2, Sprite(BinaryTexture::Create(SpriteData::AlienDeathSprite, SpriteData::LayoutAlienDeathSprite),
             { SpriteData::SizeAlienDeathSprite[0], SpriteData::SizeAlienDeathSprite[1] }));
-        m_Animator->CreateAnimation("Move", [](int activeSprite) { return activeSprite == 0 ? 1 : 0; });
-        m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 2; }, 275, 0);
-    }
+        if (type == 3)
+        {
+            AddSprite(3, Sprite(BinaryTexture::Create(SpriteData::AlienShipScoreSprite, SpriteData::LayoutAlienShipScoreSprite),
+                { SpriteData::SizeAlienShipScoreSprite[0], SpriteData::SizeAlienShipScoreSprite[1] }));
+            m_Animator->CreateAnimation("Explode", [](int activeSprite) { return 2; }, 200, 0);
+            m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 3; }, 500, 0);
+        }
+        else
+        {
+            m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 2; }, 275, 0);
+            m_Animator->CreateAnimation("Move", [](int activeSprite) { return activeSprite == 0 ? 1 : 0; });
+        }
+
+}
 
     Alien::~Alien()
     {
@@ -48,7 +63,8 @@ namespace SpaceInvaders
 
     void Alien::Move(glm::vec2 position)
     {
-        Animate("Move");
+        if (m_Type != 3) Animate("Move");
+        if (m_Type == 3 && m_Position.x < -50.0f) m_IsAlive = false;
         Actor::Move(position);
     }
 
@@ -56,7 +72,7 @@ namespace SpaceInvaders
     {
         m_Lives--;
         if (m_Lives == 0)
-            Animate("Killed");
+            m_Type == 3 ? Animate("Explode") : Animate("Killed");
         return m_Lives;
     }
 }

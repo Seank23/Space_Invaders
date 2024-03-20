@@ -25,6 +25,7 @@ namespace SpaceInvaders
 		int GetPoints() { return m_Points; }
 
 		void SetShootChance(float chance) { m_ShootChance = chance; }
+		void SetIsAlive(bool alive) { m_IsAlive = alive; }
 
 	private:
 		int m_Type;

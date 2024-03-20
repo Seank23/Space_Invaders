@@ -6,8 +6,8 @@
 
 namespace SpaceInvaders
 {
-	AlienSwarm::AlienSwarm()
-		: m_InitialPosition({ 0.0f, 0.0f }), m_StateManager(GameStateManager::Instance())
+	AlienSwarm::AlienSwarm(bool isShip)
+		: m_InitialPosition({ 0.0f, 0.0f }), m_StateManager(GameStateManager::Instance()), m_IsShip(isShip)
 	{
 	}
 
@@ -19,21 +19,30 @@ namespace SpaceInvaders
 
 	void AlienSwarm::Init(glm::vec2 initialPosition)
 	{
-		m_InitialPosition = initialPosition;
-		m_AlienIndex = 0;
 		m_Aliens.clear();
-		glm::vec2 gameSpace = GameStateManager::s_GameSpace;
-		m_AlienPaddingX = (gameSpace.x - 2 * m_InitialPosition.x) / (m_AlienCount[0] - 1);
-		float yPadding = (gameSpace.y - m_InitialPosition.x - (gameSpace.y / 1.8f)) / m_AlienCount[1];
-		int type = 0;
-		for (int y = m_AlienCount[1] - 1; y >= 0; y--)
+		m_InitialPosition = initialPosition;
+		if (m_IsShip)
 		{
-			type = y > 2 ? 2 : y > 0 ? 1 : 0;
-			for (int x = 0; x < m_AlienCount[0]; x++)
+			Alien* alien = new Alien(3);
+			alien->SetPosition(initialPosition);
+			m_Aliens.emplace_back(alien);
+		}
+		else
+		{
+			m_AlienIndex = 0;
+			glm::vec2 gameSpace = GameStateManager::s_GameSpace;
+			m_AlienPaddingX = (gameSpace.x - 2 * m_InitialPosition.x) / (m_AlienCount[0] - 1);
+			float yPadding = (gameSpace.y - m_InitialPosition.x - (gameSpace.y / 1.8f)) / m_AlienCount[1];
+			int type = 0;
+			for (int y = m_AlienCount[1] - 1; y >= 0; y--)
 			{
-				Alien* alien = new Alien(type);
-				alien->SetPosition({ m_InitialPosition.x + x * m_AlienPaddingX, m_InitialPosition.y + y * yPadding });
-				m_Aliens.emplace_back(alien);
+				type = y > 2 ? 2 : y > 0 ? 1 : 0;
+				for (int x = 0; x < m_AlienCount[0]; x++)
+				{
+					Alien* alien = new Alien(type);
+					alien->SetPosition({ m_InitialPosition.x + x * m_AlienPaddingX, m_InitialPosition.y + y * yPadding });
+					m_Aliens.emplace_back(alien);
+				}
 			}
 		}
 	}
@@ -67,8 +76,8 @@ namespace SpaceInvaders
 				if (anim == "Killed")
 				{
 					alien->Destroy();
-					callback();
 				}
+				callback();
 			}
 		}
 		int removedIndex = CullAliens();
@@ -78,27 +87,34 @@ namespace SpaceInvaders
 
 	void AlienSwarm::MoveAliens()
 	{
-		for (int i = 0; i < m_Aliens.size(); i++)
+		if (m_IsShip && m_Aliens.size() > 0)
 		{
-			Alien& alien = *m_Aliens[i];
-			if (i == m_AlienIndex)
+			m_Aliens[0]->Move({-m_AlienStepX * 0.5f, 0.0f});
+		}
+		else
+		{
+			for (int i = 0; i < m_Aliens.size(); i++)
 			{
-				alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
+				Alien& alien = *m_Aliens[i];
+				if (i == m_AlienIndex)
+				{
+					alien.Move({ m_AlienDirection * m_AlienStepX, (int)m_AlienShouldDescend * m_AlienStepY });
+				}
+				if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size() / (m_StateManager->GetWave() + 1)) == 0)
+					alien.Shoot(GameStateManager::s_GameSpace.y - alien.GetPosition().y - GameStateManager::s_Margin.y - 15.0f);
 			}
-			if (std::rand() % (int)((1.0f / alien.GetShootChance()) * m_Aliens.size() / (m_StateManager->GetWave() + 1)) == 0)
-				alien.Shoot(GameStateManager::s_GameSpace.y - alien.GetPosition().y - GameStateManager::s_Margin.y - 15.0f);
-		}
-		if (m_AlienIndex == m_Aliens.size() - 1)
-		{
-			m_AlienShouldDescend = ShouldAliensDescend();
-			if (m_AlienShouldDescend)
-				m_AlienDirection *= -1;
-		}
+			if (m_AlienIndex == m_Aliens.size() - 1)
+			{
+				m_AlienShouldDescend = ShouldAliensDescend();
+				if (m_AlienShouldDescend)
+					m_AlienDirection *= -1;
+			}
 
-		if (m_Aliens.size() > 0)
-		{
-			m_AlienIndex++;
-			m_AlienIndex %= m_Aliens.size();
+			if (m_Aliens.size() > 0)
+			{
+				m_AlienIndex++;
+				m_AlienIndex %= m_Aliens.size();
+			}
 		}
 	}
 
@@ -146,7 +162,7 @@ namespace SpaceInvaders
 		for (auto& alien : m_Aliens)
 		{
 			int posDifference = std::abs(alien->GetPosition().x - playerPosition);
-			float lerp = std::lerp(1.0f, 0.1f, (float)posDifference / gameWidth);
+			float lerp = std::lerp(1.0f, 0.03f, (float)posDifference / gameWidth);
 			alien->SetShootChance(0.03f * lerp);
 		}
 	}

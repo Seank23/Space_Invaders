@@ -9,7 +9,7 @@ namespace SpaceInvaders
 	class AlienSwarm
 	{
 	public:
-		AlienSwarm();
+		AlienSwarm(bool isShip = false);
 		~AlienSwarm();
 
 		void Init(glm::vec2 initialPosition);
@@ -24,6 +24,11 @@ namespace SpaceInvaders
 		std::vector<Alien*>& GetAliens() { return m_Aliens; }
 		void SetAlienIndex(int index) { m_AlienIndex = index; }
 		int GetAlienIndex() { return m_AlienIndex; }
+		//const Alien& GetShip() { return &m_Aliens[0]; }
+
+		void StopSwarm() { m_Stop = true; }
+		void RestartSwarm() { m_Stop = false; }
+		bool IsStopped() { return m_Stop; }
 
 
 	private:
@@ -43,6 +48,8 @@ namespace SpaceInvaders
 		float m_AlienStepX = 6.0f;
 		float m_AlienStepY = 20.0f;
 		bool m_AlienShouldDescend = false;
+		bool m_IsShip = false;
+		bool m_Stop = false;
 	};
 }
 
