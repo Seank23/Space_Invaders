@@ -250,7 +250,10 @@ namespace SpaceInvaders
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
         if (m_AlienShip->CheckWaveComplete() && !m_GameOver && std::rand() % (int)(1.0f / m_ShipChance) == 0)
+        {
             m_AlienShip->Init({ 650.0f, 120.0f });
+            m_AlienShip->RestartSwarm();
+        }
     }
 
     void Game::DrawSprites(float ts)

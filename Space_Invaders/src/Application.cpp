@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "Log.h"
 
+#include <windows.h>
+
 #include <chrono>
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -34,6 +36,7 @@ namespace SpaceInvaders
 
 	Application::Application()
 	{
+		ShowWindow(GetConsoleWindow(), SW_HIDE);
 		SpaceInvaders::Log::Init();
 		Init();
 	}
