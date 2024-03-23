@@ -63,55 +63,72 @@ namespace SpaceInvaders
 
     void Game::Update(float ts)
     {
-        m_Renderer->DrawSprite(*m_Ground, m_GroundTransform);
-
+        m_Renderer->DrawSprite(*m_Ground, m_GroundTransform); // Always draw ground
         m_StateManager->SetPlayerPosition(m_Player->GetPosition().x);
 
         if (m_GameOver)
-        {
-            m_GameOverTimer -= ts;
-            if (m_GameOverTimer <= 0.0f)
-            {
-                // Start new game
-                m_GameOverTimer = 3.0f;
-                m_GameOver = false;
-                m_StateManager->ResetGame();
-                m_Player->ResetLives();
-                m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) });
-                m_InitAliens = true;
-                for (auto& shield : m_StateManager->GetShields())
-                    shield->Reset();
-                int highScore = m_StateManager->GetHighScore();
-                m_HighScoreText->SetText(std::string(4 - std::min(4, (int)std::to_string(highScore).length()), '0') + std::to_string(highScore));
-                m_Player1ScoreText->SetText("0000");
-                m_LivesText->SetText("3");
-                m_LivesLeftIcons->SetText("``_____");
-                m_Player->SetPosition({ 50.0f, 680.0f });
-            }
-            else
-            {
-                DrawSprites(ts);
-                return;
-            }
-        }
+            if (HandleGameOver(ts)) return;
 
         if (m_AlienSwarm->CheckWaveComplete())
-        {
-            m_StateManager->IncrementWave();
-            m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) + (50 * m_StateManager->GetWave()) });
-            m_Player->AddLife();
-            int livesLeft = m_Player->GetLives();
-            m_LivesText->SetText(std::to_string(livesLeft));
-            m_LivesLeftIcons->SetText(std::string(livesLeft - 1, '`') + std::string(7 - (livesLeft - 1), '_'));
-            m_InitAliens = true;
-        }
+            StartNextWave();
 
         if (m_AlienSwarm->HasReachedGround())
-        {
             m_GameOver = true;
-        }
+        
+        if (m_PlayerHit)
+            HandlePlayerHit(ts);
 
-        // Handle projectiles
+        HandleProjectiles(ts);
+        HandleAnimations(ts);
+        HandleMove(ts);
+
+        DrawSprites(ts);
+
+        m_FrameCount++;
+    }
+
+    bool Game::HandleGameOver(float ts)
+    {
+        m_GameOverTimer -= ts;
+        if (m_GameOverTimer <= 0.0f)
+        {
+            // Start new game
+            m_GameOverTimer = 3.0f;
+            m_GameOver = false;
+            m_StateManager->ResetGame();
+            m_Player->ResetLives();
+            m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) });
+            m_InitAliens = true;
+            for (auto& shield : m_StateManager->GetShields())
+                shield->Reset();
+            int highScore = m_StateManager->GetHighScore();
+            m_HighScoreText->SetText(std::string(4 - std::min(4, (int)std::to_string(highScore).length()), '0') + std::to_string(highScore));
+            m_Player1ScoreText->SetText("0000");
+            m_LivesText->SetText("3");
+            m_LivesLeftIcons->SetText("``_____");
+            m_Player->SetPosition({ 50.0f, 680.0f });
+        }
+        else
+        {
+            DrawSprites(ts);
+            return false;
+        }
+        return true;
+    }
+
+    void Game::StartNextWave()
+    {
+        m_StateManager->IncrementWave();
+        m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, (GameStateManager::s_GameSpace.y / 4) + (50 * m_StateManager->GetWave()) });
+        m_Player->AddLife();
+        int livesLeft = m_Player->GetLives();
+        m_LivesText->SetText(std::to_string(livesLeft));
+        m_LivesLeftIcons->SetText(std::string(livesLeft - 1, '`') + std::string(7 - (livesLeft - 1), '_'));
+        m_InitAliens = true;
+    }
+
+    void Game::HandleProjectiles(float ts)
+    {
         auto& projectiles = m_StateManager->GetProjectiles();
         auto& shields = m_StateManager->GetShields();
         for (auto& projectile : projectiles)
@@ -123,7 +140,7 @@ namespace SpaceInvaders
 
             if (glm::dot(projectile->GetDirection(), glm::vec2(0.0f, 1.0f)) < 0.0f)
             {
-                // Check alien and projectile collision
+                // Check alien collision
                 bool alienHit = m_AlienSwarm->CheckProjectileCollision(*projectile);
                 bool shipHit = false;
                 if (!alienHit)
@@ -137,6 +154,8 @@ namespace SpaceInvaders
                     m_Player1ScoreText->SetText(scoreText);
                 }
                 if (projectile->GetDistanceToLive() == 0) continue;
+                
+                // Check projectile - projectile collision
                 for (int i = 0; i < projectiles.size(); i++)
                 {
                     if (glm::dot(projectile->GetDirection(), projectiles[i]->GetDirection()) > 0.0f || projectiles[i]->GetDistanceToLive() == 0) continue;
@@ -179,42 +198,46 @@ namespace SpaceInvaders
             }
         }
         m_StateManager->CullProjectiles();
+    }
 
-        // Handle when player is hit
-        if (m_PlayerHit)
+    void Game::HandlePlayerHit(float ts)
+    {
+        m_AlienSwarm->StopSwarm();
+        if (m_FrameCount % 10 == 0)
+            m_Player->Animate("Hit");
+
+        m_PlayerHitTimer -= ts;
+        if (m_PlayerHitTimer <= 0.0f)
         {
-            m_AlienSwarm->StopSwarm();
-            if (m_FrameCount % 10 == 0)
-                m_Player->Animate("Hit");
-
-            m_PlayerHitTimer -= ts;
-            if (m_PlayerHitTimer <= 0.0f)
+            int livesLeft = m_Player->GetLives();
+            if (livesLeft == 0)
             {
-                int livesLeft = m_Player->GetLives();
-                if (livesLeft == 0)
-                {
-                    m_GameOver = true;
-                    INFO("Game Over!");
-                }
-                m_LivesText->SetText(std::to_string(livesLeft));
-                m_LivesLeftIcons->SetText(std::string(std::max(livesLeft - 1, 0), '`') + std::string(7 - std::max(livesLeft - 1, 0), '_'));
-                m_PlayerHit = false;
-                m_AlienSwarm->RestartSwarm();
-                m_PlayerHitTimer = 1.0f;
-                m_Player->SetPosition({ 50.0f, 680.0f });
-                m_Player->GetAnimator()->SetActiveSpriteIndex(0);
+                m_GameOver = true;
+                INFO("Game Over!");
             }
+            if (!m_GameOver) m_AlienSwarm->RestartSwarm();
+            m_LivesText->SetText(std::to_string(livesLeft));
+            m_LivesLeftIcons->SetText(std::string(std::max(livesLeft - 1, 0), '`') + std::string(7 - std::max(livesLeft - 1, 0), '_'));
+            m_PlayerHit = false;
+            m_PlayerHitTimer = 1.0f;
+            m_Player->SetPosition({ 50.0f, 680.0f });
+            m_Player->GetAnimator()->SetActiveSpriteIndex(0);
         }
+    }
 
-        // Handle alien animations
+    void Game::HandleAnimations(float ts)
+    {
         m_AlienSwarm->CheckAnimationsAndCull(ts, [this]() { m_AlienSwarm->RestartSwarm(); });
-        m_AlienShip->CheckAnimationsAndCull(ts, [this]() 
-            { 
+        m_AlienShip->CheckAnimationsAndCull(ts, [this]()
+            {
                 for (auto& ship : m_AlienShip->GetAliens())
                     ship->Animate("Killed");
             });
         m_AlienSwarm->CalculateShootChance();
+    }
 
+    void Game::HandleMove(float ts)
+    {
         // Handle alien move
         if (!m_InitAliens && (int)m_GameTimer.elapsedMilliseconds() % (int)((1.0f / m_SwarmFps) * 1000) < (int)(1000 * ts))
         {
@@ -226,13 +249,8 @@ namespace SpaceInvaders
         if (m_StateManager->IsMoveValid({ ts * m_MoveVelocity, 0.0f }, m_Player->GetPosition()))
             m_Player->Move({ ts * m_MoveVelocity, 0.0f });
 
-        if (m_AlienShip->CheckWaveComplete() && std::rand() % (int)(1.0f / m_ShipChance) == 0)
+        if (m_AlienShip->CheckWaveComplete() && !m_GameOver && std::rand() % (int)(1.0f / m_ShipChance) == 0)
             m_AlienShip->Init({ 650.0f, 120.0f });
-
-        // Handle drawing
-        DrawSprites(ts);
-
-        m_FrameCount++;
     }
 
     void Game::DrawSprites(float ts)
@@ -242,6 +260,7 @@ namespace SpaceInvaders
         auto& shields = m_StateManager->GetShields();
         if (m_InitAliens)
         {
+            if (m_AlienSwarm->IsStopped()) m_AlienSwarm->RestartSwarm();
             int alienIndex = m_AlienSwarm->GetAlienIndex();
             for (int i = 0; i < alienIndex; i++)
                 m_Renderer->DrawSprite(aliens[i]->GetSprite(), aliens[i]->GetTransform());

@@ -22,6 +22,12 @@ namespace SpaceInvaders
 		void InputListener(int key, int action);
 
 	private:
+		bool HandleGameOver(float ts);
+		void StartNextWave();
+		void HandleProjectiles(float ts);
+		void HandlePlayerHit(float ts);
+		void HandleAnimations(float ts);
+		void HandleMove(float ts);
 		void DrawSprites(float ts);
 
 		float m_SwarmFps = 60.0f;
@@ -50,7 +56,7 @@ namespace SpaceInvaders
 		float m_PlayerHitTimer = 1.0f;
 		float m_GameOverTimer = 3.0f;
 		bool m_InitAliens = false;
-		float m_ShipChance = 0.001f;
+		float m_ShipChance = 0.0005f;
 
 		std::unique_ptr<TextSprite> m_ScoreLabelText;
 		std::unique_ptr<TextSprite> m_Player1ScoreText;
