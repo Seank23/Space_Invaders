@@ -3,6 +3,7 @@
 #include "Engine/BinaryTexture.h"
 #include "Engine/SpriteAnimator.h"
 #include "Log.h"
+#include "Engine/Audio/AudioUtils.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -10,6 +11,16 @@
 
 namespace SpaceInvaders
 {
+    const double PI = 3.14159;
+
+    double SoundFunc(double time)
+    {
+        double freq = 220.0;
+        double sample = sin(freq * 2.0 * PI * time);
+        double output = sample > 0.0 ? 1.0 : -1.0;
+        return output * 0.01;
+    }
+
     Game::Game()
         : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_AlienShip(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
         m_StateManager(GameStateManager::Instance())
@@ -27,6 +38,12 @@ namespace SpaceInvaders
 
     void Game::Init(int* windowLayout)
     {
+        auto devices = AudioEngine::AudioUtils::EnumerateDevices();
+        AudioEngine::StreamParameters streamParams;
+        streamParams.outputDevice = devices[0];
+        m_AudioStream = std::make_unique<AudioEngine::AudioStream<short>>(streamParams);
+        m_AudioStream->SetUserFunction(SoundFunc);
+
         glm::mat4 proj = glm::ortho(0.0f, GameStateManager::s_GameSpace.x, GameStateManager::s_GameSpace.y, 0.0f, -1.0f, 1.0f);
         m_Shader = new Shader("res/shaders/Basic.shader");
         m_Shader->Bind();
@@ -102,7 +119,7 @@ namespace SpaceInvaders
             for (auto& shield : m_StateManager->GetShields())
                 shield->Reset();
             int highScore = m_StateManager->GetHighScore();
-            m_HighScoreText->SetText(std::string(4 - std::min(4, (int)std::to_string(highScore).length()), '0') + std::to_string(highScore));
+            m_HighScoreText->SetText(std::string(4 - std::fmin(4, (int)std::to_string(highScore).length()), '0') + std::to_string(highScore));
             m_Player1ScoreText->SetText("0000");
             m_LivesText->SetText("3");
             m_LivesLeftIcons->SetText("``_____");
@@ -150,7 +167,7 @@ namespace SpaceInvaders
                 {
                     alienHit ? m_AlienSwarm->StopSwarm() : m_AlienShip->StopSwarm();
                     int score = m_StateManager->GetScore();
-                    std::string scoreText = std::string(4 - std::min(4, (int)std::to_string(score).length()), '0') + std::to_string(score);
+                    std::string scoreText = std::string(4 - std::fmin(4, (int)std::to_string(score).length()), '0') + std::to_string(score);
                     m_Player1ScoreText->SetText(scoreText);
                 }
                 if (projectile->GetDistanceToLive() == 0) continue;
@@ -217,7 +234,7 @@ namespace SpaceInvaders
             }
             if (!m_GameOver) m_AlienSwarm->RestartSwarm();
             m_LivesText->SetText(std::to_string(livesLeft));
-            m_LivesLeftIcons->SetText(std::string(std::max(livesLeft - 1, 0), '`') + std::string(7 - std::max(livesLeft - 1, 0), '_'));
+            m_LivesLeftIcons->SetText(std::string(std::fmax(livesLeft - 1, 0), '`') + std::string(7 - std::fmax(livesLeft - 1, 0), '_'));
             m_PlayerHit = false;
             m_PlayerHitTimer = 1.0f;
             m_Player->SetPosition({ 50.0f, 680.0f });
