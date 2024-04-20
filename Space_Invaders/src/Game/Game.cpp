@@ -11,19 +11,9 @@
 
 namespace SpaceInvaders
 {
-    const double PI = 3.14159;
-
-    double SoundFunc(double time)
-    {
-        double freq = 220.0;
-        double sample = sin(freq * 2.0 * PI * time);
-        double output = sample > 0.0 ? 1.0 : -1.0;
-        return output * 0.01;
-    }
-
     Game::Game()
-        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_AlienShip(nullptr), m_Ground(nullptr), m_GroundTransform(glm::mat4(1.0f)),
-        m_StateManager(GameStateManager::Instance())
+        : m_Shader(nullptr), m_Renderer(nullptr), m_Player(nullptr), m_AlienSwarm(nullptr), m_AlienShip(nullptr), m_Ground(nullptr),
+        m_GroundTransform(glm::mat4(1.0f)), m_StateManager(GameStateManager::Instance())
     {
         m_GameTimer.start();
     }
@@ -33,17 +23,10 @@ namespace SpaceInvaders
         delete m_Shader;
         delete m_Renderer; 
         delete m_Player;
-        delete m_AlienSwarm;
     }
 
     void Game::Init(int* windowLayout)
     {
-        auto devices = AudioEngine::AudioUtils::EnumerateDevices();
-        AudioEngine::StreamParameters streamParams;
-        streamParams.outputDevice = devices[0];
-        m_AudioStream = std::make_unique<AudioEngine::AudioStream<short>>(streamParams);
-        m_AudioStream->SetUserFunction(SoundFunc);
-
         glm::mat4 proj = glm::ortho(0.0f, GameStateManager::s_GameSpace.x, GameStateManager::s_GameSpace.y, 0.0f, -1.0f, 1.0f);
         m_Shader = new Shader("res/shaders/Basic.shader");
         m_Shader->Bind();
@@ -60,11 +43,11 @@ namespace SpaceInvaders
         m_Player = new Player();
         m_Player->SetPosition({ 50.0f, 680.0f });
 
-        m_AlienSwarm = new AlienSwarm();
+        m_AlienSwarm = std::make_unique<AlienSwarm>();
         m_AlienSwarm->Init({ GameStateManager::s_GameSpace.x / 7, GameStateManager::s_GameSpace.y / 4 });
         m_InitAliens = true;
 
-        m_AlienShip = new AlienSwarm(true);
+        m_AlienShip = std::make_unique<AlienSwarm>(true);
 
         for (int i = 0; i < 4; i++)
             m_StateManager->AddShield(std::make_shared<Shield>(glm::vec2(120.0f + (i * 120.0f), 620.0f )));

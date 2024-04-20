@@ -22,5 +22,12 @@ namespace AudioEngine
 			}
 			return devices;
 		}
+
+		static double ToSquareWave(double sample)
+		{
+			return sample > 0.0 ? 1.0 : -1.0;
+		}
+
+		static constexpr double PI = 3.1415926;
 	};
 }

@@ -4,9 +4,9 @@
 namespace AudioEngine
 {
 	template<class T>
-	AudioStream<T>::AudioStream(StreamParameters& params)
+	AudioStream<T>::AudioStream()
+		: m_BlockCount(0), m_BlockMemory(nullptr), m_BlockSamples(0), m_Channels(0), m_CurrentBlock(0),m_HardwareDevice(nullptr), m_SampleRate(0), m_UserFunction(nullptr), m_WaveHeaders(nullptr)
 	{
-		Create(params);
 	}
 
 	template<class T>
@@ -18,6 +18,7 @@ namespace AudioEngine
 	template<class T>
 	bool AudioStream<T>::Create(StreamParameters& params)
 	{
+		if (m_Ready) Stop();
 		m_Ready = false;
 		m_SampleRate = params.sampleRate;
 		m_Channels = params.channels;
@@ -107,7 +108,7 @@ namespace AudioEngine
 			for (unsigned int n = 0; n < m_BlockSamples; n++)
 			{
 				if (m_UserFunction != nullptr)
-					newSample = (T)(Clip(m_UserFunction(m_GlobalTime), 1.0) * maxSample);
+					newSample = (T)(Clip(m_UserFunction(m_GlobalTime, ts), 1.0) * maxSample);
 
 				m_BlockMemory[currentSample + n] = newSample;
 				prevSample = newSample;

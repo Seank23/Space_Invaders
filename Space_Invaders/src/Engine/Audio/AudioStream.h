@@ -11,8 +11,11 @@
 #include <thread>
 #include <atomic>
 #include <condition_variable>
+#include <functional>
 
 #include <Windows.h>
+
+#include "AudioState.h"
 
 namespace AudioEngine
 {
@@ -29,15 +32,20 @@ namespace AudioEngine
 	class AudioStream
 	{
 	public:
-		AudioStream<T>(StreamParameters& params);
+		AudioStream<T>();
 		~AudioStream<T>();
 
 		bool Create(StreamParameters& params);
 		void Stop();
 
-		bool Destroy() { return false; }
 		double GetTime() { return m_GlobalTime; }
-		void SetUserFunction(double(*func)(double)) { m_UserFunction = func; }
+		void SetUserFunction(std::function<double(double, double)> func) { m_UserFunction = func; }
+
+		bool Destroy()
+		{
+			Stop();
+			return false;
+		}
 
 		double Clip(double sample, double max)
 		{
@@ -49,7 +57,7 @@ namespace AudioEngine
 
 
 	private:
-		double(*m_UserFunction)(double);
+		std::function<double(double, double)> m_UserFunction;
 
 		unsigned int m_SampleRate;
 		unsigned int m_Channels;

@@ -6,7 +6,6 @@
 #include "Engine/Shader.h"
 #include "Engine/SpriteRenderer.h"
 #include "Engine/Timer.h"
-#include "Engine/Audio/AudioStream.h"
 
 #include <memory>
 
@@ -34,14 +33,12 @@ namespace SpaceInvaders
 		float m_SwarmFps = 60.0f;
 		int m_FrameCount = 0;
 
-		std::unique_ptr<AudioEngine::AudioStream<short>> m_AudioStream;
-
 		Shader* m_Shader;
 		SpriteRenderer* m_Renderer;
 		std::shared_ptr<GameStateManager> m_StateManager;
 		Player* m_Player;
-		AlienSwarm* m_AlienSwarm;
-		AlienSwarm* m_AlienShip;
+		std::unique_ptr<AlienSwarm> m_AlienSwarm;
+		std::unique_ptr<AlienSwarm> m_AlienShip;
 
 		Sprite* m_Ground;
 		glm::mat4 m_GroundTransform;

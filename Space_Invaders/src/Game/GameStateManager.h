@@ -2,6 +2,8 @@
 #include "Projectile.h"
 #include "Shield.h"
 
+#include "AudioHandler.h"
+
 #include <vector>
 
 namespace SpaceInvaders
@@ -27,6 +29,8 @@ namespace SpaceInvaders
         static constexpr glm::vec2 s_Margin = { 100.0f, 50.0f };
         static const int s_EdgePadding = 35;
 
+        AudioHandler& GetAudioHandler() { return *m_AudioHandler; }
+
         bool IsMoveValid(glm::vec2 moveVelocity, glm::vec2 actorPosition);
 
         void AddToScore(int points) { m_Score += points; }
@@ -47,6 +51,8 @@ namespace SpaceInvaders
         int GetPlayerPosition() { return m_PlayerPosition; }
 
     private:
+        AudioHandler* m_AudioHandler;
+
         std::vector<std::shared_ptr<Projectile>> m_Projectiles;
         std::vector<std::shared_ptr<Shield>> m_Shields;
 

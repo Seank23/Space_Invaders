@@ -110,6 +110,12 @@ namespace SpaceInvaders
 					m_AlienDirection *= -1;
 			}
 
+			if (m_AlienIndex == 0 && !m_IsShip)
+			{
+				m_StateManager->GetAudioHandler().PlayClip("BgNote_" + std::to_string(m_BgNoteIndex));
+				m_BgNoteIndex++;
+				m_BgNoteIndex %= 4;
+			}
 			if (m_Aliens.size() > 0)
 			{
 				m_AlienIndex++;

@@ -50,6 +50,7 @@ namespace SpaceInvaders
 		bool m_AlienShouldDescend = false;
 		bool m_IsShip = false;
 		bool m_Stop = false;
+		int m_BgNoteIndex = 0;
 	};
 }
 
