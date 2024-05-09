@@ -87,9 +87,19 @@ namespace SpaceInvaders
 
 	void AlienSwarm::MoveAliens()
 	{
-		if (m_IsShip && m_Aliens.size() > 0)
+		if (m_IsShip)
 		{
-			m_Aliens[0]->Move({-m_AlienStepX * 0.5f, 0.0f});
+			if (m_Aliens.size() > 0)
+			{
+				m_Aliens[0]->Move({ -m_AlienStepX * 0.5f, 0.0f });
+
+				if (!m_StateManager->GetAudioHandler().IsClipActive("AlienShip"))
+					m_StateManager->GetAudioHandler().PlayClip("AlienShip");	
+			}
+			else if (m_StateManager->GetAudioHandler().IsClipActive("AlienShip"))
+			{
+				m_StateManager->GetAudioHandler().StopClip("AlienShip");
+			}
 		}
 		else
 		{
@@ -112,6 +122,7 @@ namespace SpaceInvaders
 
 			if (m_AlienIndex == 0 && !m_IsShip)
 			{
+				m_StateManager->GetAudioHandler().StopClip("BgNote_" + std::to_string((m_BgNoteIndex - 1) % 4));
 				m_StateManager->GetAudioHandler().PlayClip("BgNote_" + std::to_string(m_BgNoteIndex));
 				m_BgNoteIndex++;
 				m_BgNoteIndex %= 4;

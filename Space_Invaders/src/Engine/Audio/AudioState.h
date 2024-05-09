@@ -2,25 +2,25 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 namespace AudioEngine
 {
 	struct AudioClip
 	{
 		AudioClip()
-			: Name(""), Duration(0), DurationLeft(0.0), IsSquareWave(false)
+			: Name(""), Duration(0), DurationLeft(0.0), IsSquareWave(false), StartTime(0.0)
 		{}
-		AudioClip(std::string name, std::vector<double> frequencies, std::vector<int> timings, std::vector<int> sequence, int duration, bool isSquareWave)
-			: Name(name), Frequencies(frequencies), Timings(timings), Sequence(sequence), Duration(duration), DurationLeft((double)duration), IsSquareWave(isSquareWave)
+		AudioClip(std::string name, std::function<double(double, double)> audioFunction, int duration, bool isSquareWave)
+			: Name(name), AudioFunction(audioFunction), Duration(duration), DurationLeft((double)duration), IsSquareWave(isSquareWave), StartTime(0.0)
 		{}
 
 		std::string Name;
-		std::vector<double> Frequencies;
-		std::vector<int> Timings;
-		std::vector<int> Sequence;
+		std::function<double(double, double)> AudioFunction;
 		int Duration;
 		double DurationLeft;
 		bool IsSquareWave;
+		double StartTime;
 	};
 
 	class AudioState
