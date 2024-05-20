@@ -2,10 +2,12 @@
 #include "Engine/Audio/AudioUtils.h"
 #include "Log.h"
 
+#include <ctime>
+
 namespace SpaceInvaders
 {
     AudioHandler::AudioHandler(std::wstring device)
-        : m_Volume(0.01), m_CurrentTime(0.0)
+        : m_Volume(0.01), m_CurrentTime(0.0), m_Seed(std::time(0))
     {
         m_StreamParams = new AudioEngine::StreamParameters;
         m_Stream = new AudioEngine::AudioStream<short>();
@@ -15,8 +17,7 @@ namespace SpaceInvaders
             [this](double time, double ts)
             {
                 double frequency = 51.91;
-                double sig = sin(frequency * 2.0 * AudioEngine::AudioUtils::PI * std::fmod(time, 1.0));
-                return sig;
+                return sin(frequency * 2.0 * AudioEngine::AudioUtils::PI * std::fmod(time, 1.0));
             },
             70, true));
         m_State->AddClip(AudioEngine::AudioClip("BgNote_1", 
@@ -48,6 +49,15 @@ namespace SpaceInvaders
                 return sin(freq * 2.0 * AudioEngine::AudioUtils::PI * std::fmod(time, 1.0 / oscFreq));
             },
             20000, true));
+        m_State->AddClip(AudioEngine::AudioClip("PlayerShoot",
+            [this](double time, double ts)
+            {
+                double noise = AudioEngine::AudioUtils::GetNoiseSample(m_Seed) / 2.0;
+                double frequency = 2349.32;
+                double sig = sin(frequency * 2.0 * AudioEngine::AudioUtils::PI * std::fmod(time, 1.0));
+                return sig + noise;
+            },
+            700, true));
 
         m_StreamParams->outputDevice = device;
         m_Stream->Create(*m_StreamParams);
@@ -62,7 +72,6 @@ namespace SpaceInvaders
                     if (clip->IsSquareWave) sample = AudioEngine::AudioUtils::ToSquareWave(sample);
                     output += sample;
                 }
-                if (m_CurrentClips.size() > 0) output /= m_CurrentClips.size();
                 return output * m_Volume;
             });
     }
@@ -114,18 +123,5 @@ namespace SpaceInvaders
         m_CurrentClipList.clear();
         for (auto* clip : m_CurrentClips)
             m_CurrentClipList.push_back(clip->Name);
-    }
-
-    double AudioHandler::WindowFunction(double duration, double durationLeft)
-    {
-        double windowCutoff = 0.1;
-        if (durationLeft >= duration - windowCutoff * duration)
-            return (duration - durationLeft) / (duration * windowCutoff);
-        else if (durationLeft <= duration * windowCutoff)
-            return durationLeft / (duration * windowCutoff);
-        else
-            return 1.0;
-        //double freq = 1.0 / (2.0 * duration);
-        //return sin(freq * 2.0 * AudioEngine::AudioUtils::PI * (duration - durationLeft));
     }
 }

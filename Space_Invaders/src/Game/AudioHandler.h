@@ -17,8 +17,6 @@ namespace SpaceInvaders
 		void OnUpdate(float ts);
 
 	private:
-		double WindowFunction(double duration, double durationLeft);
-
 		AudioEngine::AudioStream<short>* m_Stream;
 		AudioEngine::AudioState* m_State;
 		AudioEngine::StreamParameters* m_StreamParams;
@@ -27,6 +25,7 @@ namespace SpaceInvaders
 
 		float m_Volume;
 		double m_CurrentTime;
+		uint32_t m_Seed;
 	};
 }
 

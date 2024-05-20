@@ -36,7 +36,7 @@ namespace SpaceInvaders
 
 	Application::Application()
 	{
-		ShowWindow(GetConsoleWindow(), SW_HIDE);
+		//ShowWindow(GetConsoleWindow(), SW_HIDE);
 		SpaceInvaders::Log::Init();
 		Init();
 	}

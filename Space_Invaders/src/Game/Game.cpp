@@ -325,7 +325,7 @@ namespace SpaceInvaders
                     if (m_GameTimer.elapsedMilliseconds() - m_LastShootMs >= m_PlayerShootCooldownMs)
                     {
                         m_Player->Shoot(m_Player->GetPosition().y - GameStateManager::s_Margin.x);
-                        //m_StateManager->GetAudioHandler().PlayClip("PlayerShoot");
+                        m_StateManager->GetAudioHandler().PlayClip("PlayerShoot");
                         m_LastShootMs = (int)m_GameTimer.elapsedMilliseconds();
                     }
                 }
