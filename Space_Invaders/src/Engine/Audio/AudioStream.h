@@ -39,7 +39,7 @@ namespace AudioEngine
 		void Stop();
 
 		double GetTime() { return m_GlobalTime; }
-		void SetUserFunction(std::function<double(double, double)> func) { m_UserFunction = func; }
+		void SetUserFunction(std::function<double(double)> func) { m_UserFunction = func; }
 
 		bool Destroy()
 		{
@@ -57,7 +57,7 @@ namespace AudioEngine
 
 
 	private:
-		std::function<double(double, double)> m_UserFunction;
+		std::function<double(double)> m_UserFunction;
 
 		unsigned int m_SampleRate;
 		unsigned int m_Channels;

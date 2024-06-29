@@ -48,7 +48,7 @@ namespace SpaceInvaders
 
 		float m_MoveVelocity = 0.0f;
 
-		float m_PlayerShootCooldownMs = 500.0f;
+		float m_PlayerShootCooldownMs = 700.0f;
 		int m_LastShootMs = 0;
 
 		bool m_GameOver = false;

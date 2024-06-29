@@ -46,7 +46,7 @@ namespace SpaceInvaders
             AddSprite(3, Sprite(BinaryTexture::Create(SpriteData::AlienShipScoreSprite, SpriteData::LayoutAlienShipScoreSprite),
                 { SpriteData::SizeAlienShipScoreSprite[0], SpriteData::SizeAlienShipScoreSprite[1] }));
             m_Animator->CreateAnimation("Explode", [](int activeSprite) { return 2; }, 200, 0);
-            m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 3; }, 500, 0);
+            m_Animator->CreateAnimation("Killed", [](int activeSprite) { return 3; }, 200, 0);
         }
         else
         {

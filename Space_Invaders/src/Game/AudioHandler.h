@@ -13,8 +13,12 @@ namespace SpaceInvaders
 
 		void PlayClip(std::string clipName);
 		void StopClip(std::string clipName);
+		void StopAll();
 		bool IsClipActive(std::string clipName);
 		void OnUpdate(float ts);
+
+		void IncreaseVolume() { m_Volume = std::fmin(m_Volume + 0.002, 0.1); }
+		void DecreaseVolume() { m_Volume = std::fmax(m_Volume - 0.002, 0.0); }
 
 	private:
 		AudioEngine::AudioStream<short>* m_Stream;

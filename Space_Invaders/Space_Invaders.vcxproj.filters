@@ -7,6 +7,12 @@
     <Filter Include="src\Engine">
       <UniqueIdentifier>{12A1320E-FE58-745B-6760-4DB753370F4C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Engine\Audio">
+      <UniqueIdentifier>{9334FCA7-7F2D-1BFA-A85F-007F94B7FA05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Game">
+      <UniqueIdentifier>{F6C81ECF-E295-79DA-0BAF-6782F7DAAE68}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -36,10 +42,31 @@
     <ClInclude Include="src\Application.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Audio\AudioStream.h">
+      <Filter>src\Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Audio\AudioUtils.h">
+      <Filter>src\Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\BinaryTexture.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine\IndexBuffer.h">
       <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Shader.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Sprite.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\SpriteAnimator.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\SpriteRenderer.h">
+      <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Timer.h">
       <Filter>src\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\VertexArray.h">
@@ -50,6 +77,42 @@
     </ClInclude>
     <ClInclude Include="src\Engine\VertexBufferLayout.h">
       <Filter>src\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Actor.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Alien.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\AlienSwarm.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Game.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\GameStateManager.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Laser.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Player.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Projectile.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Shield.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\SpriteData.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\TextData.h">
+      <Filter>src\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\TextSprite.h">
+      <Filter>src\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Log.h">
       <Filter>src</Filter>
@@ -1284,25 +1347,18 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine\BinaryTexture.h" />
-    <ClInclude Include="src\Engine\SpriteRenderer.h" />
-    <ClInclude Include="src\Game\SpriteData.h" />
-    <ClInclude Include="src\Game\Actor.h" />
-    <ClInclude Include="src\Game\Game.h" />
-    <ClInclude Include="src\Game\Player.h" />
-    <ClInclude Include="src\Game\Alien.h" />
-    <ClInclude Include="src\Engine\Sprite.h" />
-    <ClInclude Include="src\Engine\Timer.h" />
-    <ClInclude Include="src\Game\Projectile.h" />
-    <ClInclude Include="src\Game\Laser.h" />
-    <ClInclude Include="src\Engine\SpriteAnimator.h" />
-    <ClInclude Include="src\Game\AlienSwarm.h" />
-    <ClInclude Include="src\Game\GameStateManager.h" />
-    <ClInclude Include="src\Game\Shield.h" />
+    <ClInclude Include="src\Engine\Audio\AudioState.h" />
+    <ClInclude Include="src\Game\AudioHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Audio\AudioStream.cpp">
+      <Filter>src\Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\BinaryTexture.cpp">
+      <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\IndexBuffer.cpp">
       <Filter>src\Engine</Filter>
@@ -1310,11 +1366,50 @@
     <ClCompile Include="src\Engine\Shader.cpp">
       <Filter>src\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Sprite.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\SpriteAnimator.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\SpriteRenderer.cpp">
+      <Filter>src\Engine</Filter>
+    </ClCompile>
     <ClCompile Include="src\Engine\VertexArray.cpp">
       <Filter>src\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\VertexBuffer.cpp">
       <Filter>src\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Actor.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Alien.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\AlienSwarm.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Game.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\GameStateManager.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Laser.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Player.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Projectile.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Shield.cpp">
+      <Filter>src\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\TextSprite.cpp">
+      <Filter>src\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Log.cpp">
       <Filter>src</Filter>
@@ -1325,18 +1420,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Engine\BinaryTexture.cpp" />
-    <ClCompile Include="src\Engine\SpriteRenderer.cpp" />
-    <ClCompile Include="src\Game\Game.cpp" />
-    <ClCompile Include="src\Game\Player.cpp" />
-    <ClCompile Include="src\Game\Alien.cpp" />
-    <ClCompile Include="src\Engine\Sprite.cpp" />
-    <ClCompile Include="src\Game\Actor.cpp" />
-    <ClCompile Include="src\Game\Projectile.cpp" />
-    <ClCompile Include="src\Game\Laser.cpp" />
-    <ClCompile Include="src\Engine\SpriteAnimator.cpp" />
-    <ClCompile Include="src\Game\AlienSwarm.cpp" />
-    <ClCompile Include="src\Game\GameStateManager.cpp" />
-    <ClCompile Include="src\Game\Shield.cpp" />
+    <ClCompile Include="src\Engine\Audio\AudioState.cpp" />
+    <ClCompile Include="src\Game\AudioHandler.cpp" />
   </ItemGroup>
 </Project>

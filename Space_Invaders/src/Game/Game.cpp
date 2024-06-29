@@ -150,6 +150,7 @@ namespace SpaceInvaders
 
                 if (alienHit || shipHit)
                 {
+                    m_StateManager->GetAudioHandler().PlayClip("AlienHit");
                     alienHit ? m_AlienSwarm->StopSwarm() : m_AlienShip->StopSwarm();
                     int score = m_StateManager->GetScore();
                     std::string scoreText = std::string(4 - std::fmin(4, (int)std::to_string(score).length()), '0') + std::to_string(score);
@@ -177,6 +178,8 @@ namespace SpaceInvaders
                     projectile->SetDistanceToLive(0);
                     m_Player->TakeDamage();
                     m_PlayerHit = true;
+                    m_StateManager->GetAudioHandler().StopAll();
+                    m_StateManager->GetAudioHandler().PlayClip("PlayerHit");
                 }
             }
             // Check shield collision
@@ -233,7 +236,10 @@ namespace SpaceInvaders
         m_AlienShip->CheckAnimationsAndCull(ts, [this]()
             {
                 for (auto& ship : m_AlienShip->GetAliens())
+                {
                     ship->Animate("Killed");
+                    m_StateManager->GetAudioHandler().StopClip("AlienShip");
+                }
             });
         m_AlienSwarm->CalculateShootChance();
     }
@@ -307,18 +313,25 @@ namespace SpaceInvaders
 
     void Game::InputListener(int key, int action)
     {
+        if (key == GLFW_KEY_MINUS)
+            m_StateManager->GetAudioHandler().DecreaseVolume();
+        else if (key == GLFW_KEY_EQUAL)
+            m_StateManager->GetAudioHandler().IncreaseVolume();
         if (!m_PlayerHit && !m_InitAliens)
         {
             switch (key)
             {
+            case GLFW_KEY_A:
             case GLFW_KEY_LEFT:
                 if (action == GLFW_PRESS) m_MoveVelocity = -300.0f;
                 else if (action == GLFW_RELEASE) m_MoveVelocity = 0.0f;
                 break;
+            case GLFW_KEY_D:
             case GLFW_KEY_RIGHT:
                 if (action == GLFW_PRESS) m_MoveVelocity = 300.0f;
                 else if (action == GLFW_RELEASE) m_MoveVelocity = 0.0f;
                 break;
+            case GLFW_KEY_SPACE:
             case GLFW_KEY_UP:
                 if (action == GLFW_PRESS)
                 {

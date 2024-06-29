@@ -108,7 +108,7 @@ namespace AudioEngine
 			for (unsigned int n = 0; n < m_BlockSamples; n++)
 			{
 				if (m_UserFunction != nullptr)
-					newSample = (T)(Clip(m_UserFunction(m_GlobalTime, ts), 1.0) * maxSample);
+					newSample = (T)(Clip(m_UserFunction(m_GlobalTime), 1.0) * maxSample);
 
 				m_BlockMemory[currentSample + n] = newSample;
 				prevSample = newSample;
